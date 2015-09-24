@@ -40,7 +40,8 @@ class Hmm {
     });
 
     if (command == null) {
-      Log.error('Invalid command: $commandType');
+      Log.error('invalid command: $commandType');
+      printUsage();
       Sys.exit(1);
     }
 
@@ -48,12 +49,12 @@ class Hmm {
   }
 
   public static function printUsage() {
-    Log.info("Usage: haxelib run hmm [command] [options]");
+    Log.info("Usage: hmm [command] [options]");
     Log.info("");
     Log.info("Commands:");
     Log.info("");
     for (command in commands) {
-      Log.info('${command.type} - ${command.getUsage()}');
+      Log.info('    ${command.type} - ${command.getUsage()}');
     }
     Log.info("");
     Sys.exit(1);

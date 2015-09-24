@@ -14,6 +14,7 @@ class SetupCommand implements ICommand {
   }
 
   public function run() {
+    Shell.command("chmod", ["+x", getHmmScriptFilePath()]);
     Shell.symbolicLink(getHmmScriptFilePath(), HMM_LINK_PATH);
   }
 

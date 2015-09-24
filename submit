@@ -1,0 +1,11 @@
+#! /usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+if [[ -f hmm.zip ]]; then
+  rm hmm.zip
+fi
+
+zip -r hmm.zip LICENSE README build.hxml haxelib.json run.n src
+
+haxelib submit hmm.zip

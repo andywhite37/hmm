@@ -1,0 +1,14 @@
+{
+  "name": "hmm",
+  "url": "https://github.com/andywhite37/hmm",
+  "license": "MIT",
+  "tags": ["tools"],
+  "description": "Local haxelib installation helper",
+  "version": "0.0.1",
+  "classPath": "src/",
+  "releasenote": "Initial release",
+  "contributors": ["andywhite37"],
+  "dependencies": {
+    "mcli": "0.1.4"
+  }
+}

@@ -5,13 +5,13 @@ import hmm.utils.Log;
 import hmm.utils.Shell;
 
 class Hmm {
-  public static var commands(default, null) : Map<String, Void -> ICommand>;
+  public static var commands(default, null) : Map<String, ICommand>;
 
   public static function main() {
     commands = [
-      "clean" => function() return new CleanCommand(),
-      "install" => function() return new InstallCommand(),
-      "update" => function() return new UpdateCommand()
+      "clean" => new CleanCommand(),
+      "install" => new InstallCommand(),
+      "update" => new UpdateCommand()
     ];
 
     var command = "";
@@ -28,7 +28,7 @@ class Hmm {
       showUsage();
     }
 
-    commands[command]().run();
+    commands[command].run();
   }
 
   static function showUsage() {

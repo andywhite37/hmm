@@ -7,6 +7,8 @@ if [[ -f hmm.zip ]]; then
 fi
 
 haxe build.hxml
+git add -A
+git commit -m 'Submit to haxelib'
 
 zip -r hmm.zip LICENSE README.md build.hxml haxelib.json run.n src
 

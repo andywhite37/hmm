@@ -8,6 +8,8 @@ class Hmm {
   public static var commands(default, null) : Map<String, ICommand>;
 
   public static function main() {
+    trace('Sys.args = ${Sys.args()}');
+
     commands = [
       "clean" => new CleanCommand(),
       "install" => new InstallCommand(),

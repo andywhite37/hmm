@@ -3,6 +3,8 @@ package hmm.commands;
 import hmm.utils.Shell;
 
 class CleanCommand implements ICommand {
+  public var type(default, null) = "clean";
+
   public function new() {
   }
 

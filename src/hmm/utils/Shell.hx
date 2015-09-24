@@ -6,6 +6,7 @@ using hmm.utils.AnsiColors;
 
 class Shell {
   public static var workingDirectory(default, default) : String = "";
+  public static var hmmDirectory(default, default) : String = "";
 
   public static function checkWorkingDirectory() {
     Log.info(workingDirectory);
@@ -69,6 +70,13 @@ class Shell {
 
   public static function haxelib(args : Array<String>) : Int {
     return command("haxelib", args);
+  }
+
+  public static function symbolicLink(realPath : String, linkPath : String) {
+    if (FileSystem.exists(linkPath)) {
+      command("rm", [linkPath]);
+    }
+    command("ln", ["-s", realPath, linkPath]);
   }
 
   public static function command(cmd : String, ?args : Array<String>) : Int {

@@ -5,6 +5,7 @@ import sys.FileSystem;
 import sys.io.File;
 
 class UpdateCommand implements ICommand {
+  public var type(default, null) = "update";
   public function new() {
   }
 

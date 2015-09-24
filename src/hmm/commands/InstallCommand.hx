@@ -5,6 +5,8 @@ import sys.FileSystem;
 import sys.io.File;
 
 class InstallCommand implements ICommand {
+  public var type(default, null) = "install";
+
   public function new() {
   }
 

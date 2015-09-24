@@ -68,7 +68,7 @@ Each dependency is an object with the following keys:
 
 - cd to your project root directory
 - ensure the `hmm.json` file exists in the root with some dependencies listed like above
-- run `haxelib run hmm install` from the root directory
+- run `haxelib --global run hmm install` from the root directory
 - hmm uses `haxelib` internally for doing installs and updates
 
 ## TODO

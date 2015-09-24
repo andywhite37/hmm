@@ -76,9 +76,9 @@ class Shell {
 
   public static function symbolicLink(realPath : String, linkPath : String) {
     if (FileSystem.exists(linkPath)) {
-      command("rm", [linkPath]);
+      command("sudo", ["rm", linkPath]);
     }
-    command("ln", ["-s", realPath, linkPath]);
+    command("sudo", ["ln", "-s", realPath, linkPath]);
   }
 
   public static function command(cmd : String, ?args : Array<String>) : Int {

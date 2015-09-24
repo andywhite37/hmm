@@ -9,6 +9,5 @@
   "releasenote": "Initial release",
   "contributors": ["andywhite37"],
   "dependencies": {
-    "mcli": "0.1.4"
   }
 }

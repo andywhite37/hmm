@@ -5,7 +5,10 @@ import sys.FileSystem;
 using hmm.utils.AnsiColors;
 
 class Shell {
+  public static var workingDirectory(default, default) : String = "";
+
   public static function checkWorkingDirectory() {
+    Log.info(workingDirectory);
     if (!HmmConfig.hasHmmFile()) {
       Log.error('No ${HmmConfig.HMM_JSON_FILE_NAME} found in current workding directory - aborting.');
       Sys.exit(1);
@@ -30,7 +33,7 @@ class Shell {
   public static function haxelibRemoveRepoIfExists() {
     if (HmmConfig.hasHaxelibRepo()) {
       var path = HmmConfig.getHaxelibRepoPath();
-      return command("rm", ["-r", path]); // TODO: windows support
+      return command("rm", ["-rf", path]); // TODO: windows support
     }
     return 0;
   }

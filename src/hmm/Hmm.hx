@@ -1,49 +1,41 @@
 package hmm;
 
-import mcli.CommandLine;
-import mcli.Dispatch;
 import hmm.commands.*;
 import hmm.utils.Log;
+import hmm.utils.Shell;
 
-class Hmm extends CommandLine {
-  /**
-    Prints the help information for hmm
-  **/
-  public function help() {
-    Sys.println(showUsage());
-    Sys.exit(1);
-  }
-
-  /**
-    Installs haxe libs
-  **/
-  public function install(d : Dispatch) {
-    d.dispatch(new InstallCommand());
-  }
-
-  /**
-    Updates haxe libs
-  **/
-  public function update(d : Dispatch) {
-    d.dispatch(new UpdateCommand());
-  }
-
-  /**
-    Removes local .haxelib repo directory
-  **/
-  public function clean(d : Dispatch) {
-    d.dispatch(new CleanCommand());
-  }
-
-  /**
-    No-op
-  **/
-  public function runDefault() {
-    Log.info(Sys.getCwd());
-  }
+class Hmm {
+  public static var commands(default, null) : Map<String, Void -> ICommand>;
 
   public static function main() {
-    new Dispatch(Sys.args()).dispatch(new Hmm());
+    commands = [
+      "clean" => function() return new CleanCommand(),
+      "install" => function() return new InstallCommand(),
+      "update" => function() return new UpdateCommand()
+    ];
+
+    var command = "";
+
+    if (Sys.args().length == 2) {
+      // When running via `haxelib run` the current working directory is added to the end of the args list.
+      // Also, Sys.getCwd() gets the location of the haxelib install not the actual working directory.
+      Shell.workingDirectory = Sys.args().pop();
+      command = Sys.args().pop();
+    } else if (Sys.args().length == 1) {
+      Shell.workingDirectory = Sys.getEnv("PWD");
+      command = Sys.args().pop();
+    } else {
+      showUsage();
+    }
+
+    commands[command]().run();
+  }
+
+  static function showUsage() {
+    Log.info("usage: haxelib run hmm [command]");
+    Log.info("");
+    Log.info("  command:       one of install, update, clean");
+    Sys.exit(1);
   }
 }
 

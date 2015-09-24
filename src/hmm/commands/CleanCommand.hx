@@ -1,10 +1,12 @@
 package hmm.commands;
 
 import hmm.utils.Shell;
-import mcli.CommandLine;
 
-class CleanCommand extends CommandLine {
-  public function runDefault() {
+class CleanCommand implements ICommand {
+  public function new() {
+  }
+
+  public function run() {
     Shell.checkWorkingDirectory();
     Shell.haxelibRemoveRepoIfExists();
   }

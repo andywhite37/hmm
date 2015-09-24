@@ -2,6 +2,7 @@ package hmm;
 
 import haxe.Json;
 import haxe.io.Path;
+import hmm.utils.Shell;
 import sys.FileSystem;
 import sys.io.File;
 
@@ -14,11 +15,11 @@ class HmmConfig {
   public static var HAXELIB_REPO_DIR_NAME = ".haxelib";
 
   public static function getHaxelibRepoPath() {
-    return Path.join([Sys.getCwd(), HAXELIB_REPO_DIR_NAME]);
+    return Path.join([Shell.workingDirectory, HAXELIB_REPO_DIR_NAME]);
   }
 
   public static function getHmmFilePath() {
-    return Path.join([Sys.getCwd(), HMM_JSON_FILE_NAME]);
+    return Path.join([Shell.workingDirectory, HMM_JSON_FILE_NAME]);
   }
 
   public static function hasHaxelibRepo() {

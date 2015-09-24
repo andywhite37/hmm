@@ -1,4 +1,3 @@
 -cp src
--lib mcli
 -main hmm.Hmm
 -neko run.n

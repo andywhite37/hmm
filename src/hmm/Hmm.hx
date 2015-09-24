@@ -3,6 +3,7 @@ package hmm;
 import mcli.CommandLine;
 import mcli.Dispatch;
 import hmm.commands.*;
+import hmm.utils.Log;
 
 class Hmm extends CommandLine {
   /**
@@ -38,6 +39,7 @@ class Hmm extends CommandLine {
     No-op
   **/
   public function runDefault() {
+    Log.info(Sys.getCwd());
   }
 
   public static function main() {

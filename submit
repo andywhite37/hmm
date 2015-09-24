@@ -6,6 +6,8 @@ if [[ -f hmm.zip ]]; then
   rm hmm.zip
 fi
 
+haxe build.hxml
+
 zip -r hmm.zip LICENSE README build.hxml haxelib.json run.n src
 
 haxelib submit hmm.zip

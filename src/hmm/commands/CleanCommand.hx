@@ -12,4 +12,8 @@ class CleanCommand implements ICommand {
     Shell.checkWorkingDirectory();
     Shell.haxelibRemoveRepoIfExists();
   }
+
+  public function getUsage() {
+    return "removes local .haxelib directory";
+  }
 }

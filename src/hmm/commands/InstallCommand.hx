@@ -26,5 +26,9 @@ class InstallCommand implements ICommand {
       case Mercurial: Shell.haxelibHg(library.name, library.url, library.ref, library.dir);
     };
   }
+
+  public function getUsage() {
+    return "installs libraries listed in hmm.json";
+  }
 }
 

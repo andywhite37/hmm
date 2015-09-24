@@ -5,11 +5,13 @@ import sys.FileSystem;
 using hmm.utils.AnsiColors;
 
 class Shell {
-  public static var workingDirectory(default, default) : String = "";
   public static var hmmDirectory(default, default) : String = "";
+  public static var workingDirectory(default, default) : String = "";
 
   public static function checkWorkingDirectory() {
-    Log.info(workingDirectory);
+    Sys.setCwd(workingDirectory);
+    Log.info('working directory: $workingDirectory');
+    Log.info('hmm install directory: $hmmDirectory');
     if (!HmmConfig.hasHmmFile()) {
       Log.error('No ${HmmConfig.HMM_JSON_FILE_NAME} found in current workding directory - aborting.');
       Sys.exit(1);

@@ -21,4 +21,8 @@ class SetupCommand implements ICommand {
   function getHmmScriptFilePath() {
     return Path.join([Shell.hmmDirectory, "hmm"]);
   }
+
+  public function getUsage() {
+    return "creates a symbolic link to hmm in /usr/local/bin";
+  }
 }

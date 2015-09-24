@@ -6,12 +6,13 @@ import hmm.utils.Shell;
 using Lambda;
 
 class Hmm {
-  public static var commandMap(default, null) : Map<String, ICommand>;
+  public static var commands(default, null) : Array<ICommand>;
 
   public static function main() {
     var args = Sys.args();
 
-    var commands : Array<ICommand> = [
+    commands = [
+      new HelpCommand(),
       new SetupCommand(),
       new CleanCommand(),
       new InstallCommand(),
@@ -31,12 +32,13 @@ class Hmm {
       Shell.workingDirectory = Sys.getEnv("PWD");
       commandType = args.pop();
     } else {
-      showUsage();
+      printUsage();
     }
 
     var command = commands.find(function(command) {
       return command.type == commandType;
     });
+
     if (command == null) {
       Log.error('Invalid command: $commandType');
       Sys.exit(1);
@@ -45,10 +47,15 @@ class Hmm {
     command.run();
   }
 
-  static function showUsage() {
-    Log.info("usage: haxelib run hmm [command]");
+  public static function printUsage() {
+    Log.info("Usage: haxelib run hmm [command] [options]");
     Log.info("");
-    Log.info("  command:       one of install, update, clean");
+    Log.info("Commands:");
+    Log.info("");
+    for (command in commands) {
+      Log.info('${command.type} - ${command.getUsage()}');
+    }
+    Log.info("");
     Sys.exit(1);
   }
 }

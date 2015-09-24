@@ -6,6 +6,7 @@ import sys.io.File;
 
 class UpdateCommand implements ICommand {
   public var type(default, null) = "update";
+
   public function new() {
   }
 
@@ -16,6 +17,10 @@ class UpdateCommand implements ICommand {
       Shell.haxelibUpdate(library.name);
     }
     Shell.haxelibList();
+  }
+
+  public function getUsage() {
+    return "updates libraries listed in hmm.json";
   }
 }
 

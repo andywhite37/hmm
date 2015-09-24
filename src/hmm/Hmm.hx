@@ -30,6 +30,9 @@ class Hmm {
       showUsage();
     }
 
+    trace(commands);
+    trace(command);
+
     commands[command].run();
   }
 

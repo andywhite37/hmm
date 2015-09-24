@@ -8,7 +8,7 @@ class Hmm {
   public static var commands(default, null) : Map<String, ICommand>;
 
   public static function main() {
-    trace('Sys.args = ${Sys.args()}');
+    var args = Sys.args();
 
     commands = [
       "clean" => new CleanCommand(),
@@ -18,20 +18,22 @@ class Hmm {
 
     var command = "";
 
-    if (Sys.args().length == 2) {
+    if (args.length == 2) {
       // When running via `haxelib run` the current working directory is added to the end of the args list.
       // Also, Sys.getCwd() gets the location of the haxelib install not the actual working directory.
-      Shell.workingDirectory = Sys.args().pop();
-      command = Sys.args().pop();
-    } else if (Sys.args().length == 1) {
+      Shell.workingDirectory = args.pop();
+      command = args.pop();
+    } else if (args.length == 1) {
       Shell.workingDirectory = Sys.getEnv("PWD");
-      command = Sys.args().pop();
+      command = args.pop();
     } else {
       showUsage();
     }
 
-    trace(commands);
-    trace(command);
+    if (!commands.exists(command)) {
+      Log.error('Invalid command: $command');
+      Sys.exit(1);
+    }
 
     commands[command].run();
   }

@@ -4,10 +4,9 @@
   "license": "MIT",
   "tags": ["tools"],
   "description": "Local haxelib installation helper",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "classPath": "src/",
-  "releasenote": "Initial release",
+  "releasenote": "Testing",
   "contributors": ["andywhite37"],
-  "dependencies": {
-  }
+  "dependencies": { }
 }

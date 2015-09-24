@@ -1,0 +1,25 @@
+{
+  "name": "hmm",
+  "version": "1.0.0",
+  "description": "Haxe module manager",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andywhite37/hmm.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andywhite37/hmm/issues"
+  },
+  "homepage": "https://github.com/andywhite37/hmm#readme",
+  "dependencies": {
+    "bluebird": "^2.10.1",
+    "chalk": "^1.1.1",
+    "commander": "^2.8.1",
+    "lodash": "^3.10.1"
+  }
+}

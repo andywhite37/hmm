@@ -1,4 +1,4 @@
-# hmm
+# Haxe Module Manager (hmm)
 
 hmm is a small helper for haxelib that allows you to specify, install,
 and update project dependencies using haxelib libraries, git or
@@ -15,7 +15,10 @@ details.
 
 ## Installing hmm
 
-haxelib install hmm
+haxelib --global install hmm
+
+> --global flag is needed to make sure the tool is installed globally,
+> not in a local .haxelib repo for the project.
 
 ## Project config file (hmm.json)
 
@@ -68,8 +71,20 @@ Each dependency is an object with the following keys:
 
 - cd to your project root directory
 - ensure the `hmm.json` file exists in the root with some dependencies listed like above
-- run `haxelib --global run hmm install` from the root directory
-- hmm uses `haxelib` internally for doing installs and updates
+
+### Install all dependencies in `hmm.json`:
+
+`haxelib --global run hmm install`
+
+### Update all dependencies in `hmm.json`:
+
+`haxelib --global run hmm update`
+
+### Remove the local .haxelib directory:
+
+`haxelib --global run hmm clean`
+
+> `hmm` uses `haxelib` internally for doing installs and updates
 
 ## TODO
 

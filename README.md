@@ -11,16 +11,20 @@ project can go away.
 
 hmm relies on the new "haxelib local repo" support, for installing project-local
 haxelibs in a .haxelib directory.  See `haxelib newrepo` for more
-details.
+details.  It also uses `haxelib` itself for actually installing
+libraries (both from lib.haxe.org and via git/hg/etc.).
 
-## Installing hmm
+# Installing hmm
 
-haxelib --global install hmm
+```
+> haxelib --global install hmm
+> haxelib --global run hmm setup
+```
 
-> --global flag is needed to make sure the tool is installed globally,
-> not in a local .haxelib repo for the project.
+- The `--global` flag is needed to make sure the tool is installed globally.
+- The `setup` command creates a link to the `hmm` tool at `/usr/local/bin/hmm` for ease of use.
 
-## Project config file (hmm.json)
+# hmm config file (hmm.json)
 
 hmm requires a `hmm.json` file in the root of your project, which
 specifies the project dependencies (similar to npm's package.json).
@@ -67,25 +71,27 @@ Each dependency is an object with the following keys:
   installs)
 - `dir` - the root classpath directory (for `git` and `hg` installs)
 
-## Running hmm
+# hmm commands
 
 - cd to your project root directory
 - ensure the `hmm.json` file exists in the root with some dependencies listed like above
 
-### Install all dependencies in `hmm.json`:
+## `hmm init`
 
-`haxelib --global run hmm install`
+- Creates an empty `hmm.json` file in your current directory.
+- TODO: not yet implemented
 
-### Update all dependencies in `hmm.json`:
+## `hmm install`
 
-`haxelib --global run hmm update`
+- Installs the dependencies listed in `hmm.json` to a local `.haxelib`
+  repo for your project.
+- TODO: `install --save [mylib]` - install a new libray and save it to
+  `hmm.json`
 
-### Remove the local .haxelib directory:
+## `hmm update`
 
-`haxelib --global run hmm clean`
+`hmm update`
 
-> `hmm` uses `haxelib` internally for doing installs and updates
+## `hmm clean`
 
-## TODO
-
-- Create a link/script to run from the $PATH rather than having to use `haxelib run hmm`
+Removes the local .haxelib directory

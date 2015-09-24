@@ -1,16 +1,18 @@
-package hmm;
+package hmm.commands;
 
+import hmm.utils.Shell;
 import mcli.CommandLine;
 import sys.FileSystem;
 import sys.io.File;
 
 class UpdateCommand extends CommandLine {
   public function runDefault() {
-    Command.haxelibCreateRepoIfNeeded();
+    Shell.checkWorkingDirectory();
     var config = HmmConfig.read();
     for (library in config.dependencies) {
-      Command.haxelibUpdate(library.name);
+      Shell.haxelibUpdate(library.name);
     }
+    Shell.haxelibList();
   }
 }
 

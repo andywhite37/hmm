@@ -2,19 +2,9 @@ package hmm;
 
 import mcli.CommandLine;
 import mcli.Dispatch;
+import hmm.commands.*;
 
 class Hmm extends CommandLine {
-
-  /**
-    Enables verbose logging
-    @alias v
-  **/
-  public var verbose : Bool;
-
-  public static function main() {
-    new Dispatch(Sys.args()).dispatch(new Hmm());
-  }
-
   /**
     Prints the help information for hmm
   **/
@@ -45,12 +35,13 @@ class Hmm extends CommandLine {
   }
 
   /**
-    Shows the version of hmm
+    No-op
   **/
-  public function version(d : Dispatch) {
+  public function runDefault() {
   }
 
-  public function runDefault() {
+  public static function main() {
+    new Dispatch(Sys.args()).dispatch(new Hmm());
   }
 }
 

@@ -1,5 +1,8 @@
 package hmm;
 
+/**
+  Metadata that describes a Haxe library installation source
+**/
 typedef LibraryConfig = {
   type: LibraryType,
   name: String,

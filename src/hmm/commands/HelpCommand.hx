@@ -9,7 +9,7 @@ class HelpCommand implements ICommand {
   }
 
   public function run(args : Array<String>) {
-    Hmm.printUsage();
+    Hmm.printUsageAndExit();
   }
 
   public function getUsage() {

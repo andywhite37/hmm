@@ -11,10 +11,14 @@ class Hmm {
   public static function main() {
     commands = [
       new HelpCommand(),
+      new VersionCommand(),
       new SetupCommand(),
-      new CleanCommand(),
+      new InitCommand(),
       new InstallCommand(),
-      new UpdateCommand()
+      new UpdateCommand(),
+      new CleanCommand(),
+      new HmmUpdateCommand(),
+      new HmmRemoveCommand(),
     ];
 
     var args = Sys.args();
@@ -32,27 +36,27 @@ class Hmm {
 
     if (command == null) {
       Log.error('invalid command: $commandType');
-      printUsage();
+      printUsageAndExit();
       Sys.exit(1);
     }
 
-    Log.info("hmm");
-    Log.info('working directory:  ${Shell.workingDirectory}');
-    Log.info('hmm directory:      ${Shell.hmmDirectory}');
-    Log.info('command:            $commandType');
+    //Log.info("hmm");
+    //Log.info('working directory:  ${Shell.workingDirectory}');
+    //Log.info('hmm directory:      ${Shell.hmmDirectory}');
+    //Log.info('command:            $commandType');
 
     command.run(args);
   }
 
-  public static function printUsage() {
-    Log.info("Usage: hmm [command] [options]");
-    Log.info("");
-    Log.info("Commands:");
-    Log.info("");
+  public static function printUsageAndExit() {
+    Log.println("Usage: hmm <command> [options]");
+    Log.println("");
+    Log.println("commands:");
+    Log.println("");
     for (command in commands) {
-      Log.info('    ${command.type} - ${command.getUsage()}');
+      Log.println('    ${command.type} - ${command.getUsage()}');
     }
-    Log.info("");
+    Log.println("");
     Sys.exit(1);
   }
 }

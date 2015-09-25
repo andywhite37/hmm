@@ -12,7 +12,7 @@ class InstallCommand implements ICommand {
 
   public function run(args : Array<String>) {
     Shell.ensureHmmJsonExists();
-    Shell.ensureLocalHaxelibRepoExists();
+    Shell.createLocalHaxelibRepoIfNotExists();
 
     var config = HmmConfig.readHmmJson();
 

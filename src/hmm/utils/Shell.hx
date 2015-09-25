@@ -1,7 +1,9 @@
 package hmm.utils;
 
+import haxe.Json;
 import haxe.io.Path;
 import sys.FileSystem;
+import sys.io.File;
 using hmm.utils.AnsiColors;
 
 class Shell {
@@ -16,14 +18,28 @@ class Shell {
 
   public static function ensureHmmJsonExists() : Void {
     if (!HmmConfig.hasHmmJson()) {
-      Log.die('No ${HmmConfig.HMM_JSON_FILE_NAME} found in current workding directory - aborting.');
+      Log.die('${HmmConfig.HMM_JSON_FILE_NAME} not found in current workding directory - aborting.');
     }
     Log.info('${HmmConfig.HMM_JSON_FILE_NAME} file exists, continuing');
   }
 
-  public static function ensureLocalHaxelibRepoExists() : Void {
+  public static function createHmmJsonIfNotExists() {
+    if (HmmConfig.hasHmmJson()) {
+      Log.info('${HmmConfig.HMM_JSON_FILE_NAME} already exists');
+      return;
+    }
+    var path = HmmConfig.getHmmJsonPath();
+    Log.shell('creating $path');
+    File.saveContent(path, Json.stringify({ dependencies: [] }, null, '  '));
+  }
+
+  public static function addDependecyToHmmJson(library : LibraryConfig) {
+  }
+
+  public static function createLocalHaxelibRepoIfNotExists() : Void {
     if (HmmConfig.hasLocalHaxelibRepo()) {
       Log.info('local ${HmmConfig.HAXELIB_REPO_DIR_NAME} repo exists, continuing');
+      return;
     }
     haxelibNewRepo();
   }
@@ -76,6 +92,16 @@ class Shell {
     command("chmod", ["+x", realPath]);
     command("sudo", ["rm", linkPath]);
     command("sudo", ["ln", "-s", realPath, linkPath]);
+  }
+
+  public static function updateHmm() {
+    haxelib(["--global", "update", "hmm"]);
+    haxelib(["--global", "run", "hmm", "setup"]);
+  }
+
+  public static function removeHmm() {
+    command("sudo", ["rm", hmm.commands.SetupCommand.HMM_LINK_PATH]);
+    haxelib(["--global", "remove", "hmm"]);
   }
 
   public static function command(cmd : String, ?args : Array<String>) : Void {

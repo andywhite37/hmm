@@ -30,6 +30,13 @@ class HmmConfig {
     return FileSystem.isDirectory(getLocalHaxelibRepoPath());
   }
 
+  public static function getVersion() : String {
+    var path = Path.join([Shell.hmmDirectory, "haxelib.json"]);
+    var content = File.getContent(path);
+    var data = Json.parse(content);
+    return data.version;
+  }
+
   public static function readHmmJson() : HmmConfigFile {
     var path = getHmmJsonPath();
     var text = File.getContent(path);

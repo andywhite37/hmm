@@ -3,20 +3,24 @@ package hmm.utils;
 using hmm.utils.AnsiColors;
 
 class Log {
+  public static function println(message : String) {
+    Sys.println(message);
+  }
+
   public static function debug(message : String) {
-    Sys.println(message.blue());
+    println(message.blue());
   }
 
   public static function info(message : String) {
-    Sys.println(message.green());
+    println(message.green());
   }
 
   public static function warning(message : String) {
-    Sys.println(message.magenta());
+    println(message.magenta());
   }
 
   public static function error(message : String) {
-    Sys.println(message.red());
+    println(message.red());
   }
 
   public static function die(message : String) {
@@ -25,6 +29,6 @@ class Log {
   }
 
   public static function shell(message : String) {
-    Sys.println(message.yellow());
+    println(message.yellow());
   }
 }

@@ -9,8 +9,6 @@ class Hmm {
   public static var commands(default, null) : Array<ICommand>;
 
   public static function main() {
-    var args = Sys.args();
-
     commands = [
       new HelpCommand(),
       new SetupCommand(),
@@ -19,21 +17,14 @@ class Hmm {
       new UpdateCommand()
     ];
 
-    var commandType = "";
+    var args = Sys.args();
 
-    Shell.hmmDirectory = Sys.getCwd();
+    Shell.init({
+      hmmDirectory: Sys.getCwd(),
+      workingDirectory: args.pop()
+    });
 
-    if (args.length == 2) {
-      // When running via `haxelib run` the current working directory is added to the end of the args list.
-      // Also, Sys.getCwd() gets the location of the haxelib install not the actual working directory.
-      Shell.workingDirectory = args.pop();
-      commandType = args.pop();
-    } else if (args.length == 1) {
-      Shell.workingDirectory = Sys.getEnv("PWD");
-      commandType = args.pop();
-    } else {
-      printUsage();
-    }
+    var commandType = args.shift();
 
     var command = commands.find(function(command) {
       return command.type == commandType;
@@ -45,7 +36,12 @@ class Hmm {
       Sys.exit(1);
     }
 
-    command.run();
+    Log.info("hmm");
+    Log.info('working directory:  ${Shell.workingDirectory}');
+    Log.info('hmm directory:      ${Shell.hmmDirectory}');
+    Log.info('command:            $commandType');
+
+    command.run(args);
   }
 
   public static function printUsage() {

@@ -14,25 +14,25 @@ class HmmConfig {
   public static var HMM_JSON_FILE_NAME = "hmm.json";
   public static var HAXELIB_REPO_DIR_NAME = ".haxelib";
 
-  public static function getHaxelibRepoPath() {
-    return Path.join([Shell.workingDirectory, HAXELIB_REPO_DIR_NAME]);
-  }
-
-  public static function getHmmFilePath() {
+  public static function getHmmJsonPath() {
     return Path.join([Shell.workingDirectory, HMM_JSON_FILE_NAME]);
   }
 
-  public static function hasHaxelibRepo() {
-    return FileSystem.isDirectory(getHaxelibRepoPath());
+  public static function getLocalHaxelibRepoPath() {
+    return Path.join([Shell.workingDirectory, HAXELIB_REPO_DIR_NAME]);
   }
 
-  public static function hasHmmFile(){
-    return FileSystem.exists(getHmmFilePath());
+  public static function hasHmmJson(){
+    return FileSystem.exists(getHmmJsonPath());
   }
 
-  public static function read() : HmmConfigFile {
-    var path = getHmmFilePath();
-    var rawText = File.getContent(path);
-    return cast Json.parse(rawText);
+  public static function hasLocalHaxelibRepo() {
+    return FileSystem.isDirectory(getLocalHaxelibRepoPath());
+  }
+
+  public static function readHmmJson() : HmmConfigFile {
+    var path = getHmmJsonPath();
+    var text = File.getContent(path);
+    return cast Json.parse(text);
   }
 }

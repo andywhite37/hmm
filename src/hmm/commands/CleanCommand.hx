@@ -8,9 +8,9 @@ class CleanCommand implements ICommand {
   public function new() {
   }
 
-  public function run() {
-    Shell.checkWorkingDirectory();
-    Shell.haxelibRemoveRepoIfExists();
+  public function run(args : Array<String>) {
+    Shell.ensureHmmJsonExists();
+    Shell.removeLocalHaxelibRepoIfExists();
   }
 
   public function getUsage() {

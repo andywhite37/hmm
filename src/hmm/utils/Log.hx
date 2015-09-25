@@ -19,7 +19,12 @@ class Log {
     Sys.println(message.red());
   }
 
+  public static function die(message : String) {
+    error(message);
+    Sys.exit(1);
+  }
+
   public static function shell(message : String) {
-    Sys.println(message.magenta());
+    Sys.println(message.yellow());
   }
 }

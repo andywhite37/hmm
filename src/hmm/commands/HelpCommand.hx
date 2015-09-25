@@ -8,7 +8,7 @@ class HelpCommand implements ICommand {
   public function new() {
   }
 
-  public function run() {
+  public function run(args : Array<String>) {
     Hmm.printUsage();
   }
 

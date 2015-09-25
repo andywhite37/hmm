@@ -10,12 +10,16 @@ class UpdateCommand implements ICommand {
   public function new() {
   }
 
-  public function run() {
-    Shell.checkWorkingDirectory();
-    var config = HmmConfig.read();
+  public function run(args : Array<String>) {
+    Shell.ensureHmmJsonExists();
+    Shell.ensureLocalHaxelibRepoExists();
+
+    var config = HmmConfig.readHmmJson();
+
     for (library in config.dependencies) {
       Shell.haxelibUpdate(library.name);
     }
+
     Shell.haxelibList();
   }
 

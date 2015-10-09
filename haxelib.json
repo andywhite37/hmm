@@ -4,9 +4,9 @@
   "license": "MIT",
   "tags": ["tools"],
   "description": "Local haxelib installation helper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "classPath": "src/",
-  "releasenote": "Add additional commands (init, hmm-update, hmm-remove)",
+  "releasenote": "Add git, haxelib, and remove commands for manipulating hmm.json file",
   "contributors": ["andywhite37"],
   "dependencies": { }
 }

@@ -157,4 +157,6 @@ commands:
     clean - removes local .haxelib directory
 
     hmm-update - updates the hmm tool
+
+    hmm-remove - removes the hmm tool
 ```

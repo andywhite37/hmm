@@ -31,6 +31,93 @@ rather than:
 
 `hmm [command] [options]`
 
+# Example workflows
+
+### Installation
+
+```sh
+# Make sure hmm is installed (only needed once)
+> haxelib --global install hmm
+> haxelib --global run hmm setup
+```
+
+### Self-update (update the global hmm install)
+```sh
+> hmm hmm-update
+```
+
+### Self-removal (uninstall the global hmm install)
+```sh
+> hmm hmm-remove
+```
+
+### New project setup and dependency installation
+
+```
+# Create your project directory
+> mkdir my-project
+> cd my-project
+
+# initialize hmm and local .haxelib (create hmm.json and empty .haxelib/ directory in my-project/
+> hmm init
+
+# install some libraries from lib.haxe.org
+> hmm haxelib utest
+> hmm haxelib chrome-extension 45.0.1
+
+# install some libraries via git repos
+> hmm git thx.core git@github.com:fponticelli/thx.core master src
+> hmm git mithril https://github.com/ciscoheat/mithril-hx master mithril
+
+# view the hmm.json
+> cat hmm.json
+{
+  "dependencies": [
+    {
+      "name": "chrome-extension",
+      "type": "haxelib",
+      "version": "45.0.1"
+    },
+    {
+      "name": "mithril",
+      "type": "git",
+      "dir": "mithril",
+      "ref": "master",
+      "url": "https://github.com/ciscoheat/mithril-hx"
+    },
+    {
+      "name": "thx.core",
+      "type": "git",
+      "dir": "src",
+      "ref": "master",
+      "url": "git@github.com:fponticelli/thx.core"
+    },
+    {
+      "name": "utest",
+      "type": "haxelib",
+      "version": ""
+    }
+  ]
+}
+
+# view the local haxelib installs
+> haxelib list
+chrome-extension: [45.0.1]
+mithril: git [dev:/Users/awhite/temp/haxelib-test-3/.haxelib/mithril/git/mithril]
+thx.core: git [dev:/Users/awhite/temp/haxelib-test-3/.haxelib/thx,core/git/src]
+utest: [1.3.10]
+```
+
+### Existing project setup if the project has an hmm.json file
+```sh
+# Clone a project that is using hmm
+> git clone git@github.com/someuser/someproject
+> cd someproject
+
+# Install all libs from hmm.json
+> hmm install
+```
+
 # hmm config file (hmm.json)
 
 `hmm` requires a `hmm.json` file in the root of your project, which

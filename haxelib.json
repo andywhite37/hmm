@@ -2,11 +2,12 @@
   "name": "hmm",
   "url": "https://github.com/andywhite37/hmm",
   "license": "MIT",
-  "tags": ["tools"],
+  "tags": ["tools", "helpers", "installation"],
   "description": "Local haxelib installation helper",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "classPath": "src/",
-  "releasenote": "Add git, haxelib, and remove commands for manipulating hmm.json file",
+  "releasenote": "Add hg command to install and save libs via Mercurial repos",
   "contributors": ["andywhite37"],
-  "dependencies": { }
+  "dependencies": {
+  }
 }

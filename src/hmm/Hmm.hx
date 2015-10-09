@@ -17,6 +17,7 @@ class Hmm {
       new InstallCommand(),
       new HaxelibCommand(),
       new GitCommand(),
+      new HgCommand(),
       new UpdateCommand(),
       new RemoveCommand(),
       new CleanCommand(),

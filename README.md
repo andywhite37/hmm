@@ -69,6 +69,9 @@ rather than:
 > hmm git thx.core git@github.com:fponticelli/thx.core master src
 > hmm git mithril https://github.com/ciscoheat/mithril-hx master mithril
 
+# install some libraries via mercurial repos
+> hmm hg orm https://bitbucket.org/yar3333/haxe-orm default library
+
 # view the hmm.json
 > cat hmm.json
 {
@@ -84,6 +87,13 @@ rather than:
       "dir": "mithril",
       "ref": "master",
       "url": "https://github.com/ciscoheat/mithril-hx"
+    },
+    {
+      "name": "orm",
+      "type": "hg",
+      "dir": "library",
+      "ref": "default",
+      "url": "https://bitbucket.org/yar3333/haxe-orm"
     },
     {
       "name": "thx.core",
@@ -104,6 +114,7 @@ rather than:
 > haxelib list
 chrome-extension: [45.0.1]
 mithril: git [dev:/Users/awhite/temp/haxelib-test-3/.haxelib/mithril/git/mithril]
+orm: hg [dev:/Users/awhite/temp/my-project/.haxelib/orm/hg/library]
 thx.core: git [dev:/Users/awhite/temp/haxelib-test-3/.haxelib/thx,core/git/src]
 utest: [1.3.10]
 ```
@@ -118,7 +129,7 @@ utest: [1.3.10]
 > hmm install
 ```
 
-# hmm config file (hmm.json)
+# Project config file (hmm.json)
 
 `hmm` requires a `hmm.json` file in the root of your project, which
 specifies the project dependencies (similar to npm's package.json).
@@ -165,7 +176,7 @@ Each dependency is an object with the following keys:
   installs)
 - `dir` - the root classpath directory (for `git` and `hg` installs)
 
-# hmm commands
+# Commands
 
 - Almost all `hmm` commands should be run from your project root
   directory (where the `hmm.json` file should be located).
@@ -223,6 +234,24 @@ commands:
 
         hmm git thx.core git@github.com:fponticelli/thx.core some-tag src
         - assumes ref is "some-tag" and sub-directory is "src"
+
+
+    hg - adds a hg-based dependency to hmm.json, and installs the dependency using `haxelib hg`
+
+        usage: hmm hg <name> <url> [ref] [dir]
+
+        arguments:
+        - name - the name of the library (required)
+        - url - the clone url or path to the hg repo (required)
+        - ref - the branch name/tag name/committish to use when installing/updating the library (default: "default")
+        - dir - the sub-directory in the hg repo where the code is located (default: "")
+
+        ref and sub-directory are optional, however, to specify sub-directory, you must also specify the ref.
+
+        example:
+
+        hmm hg orm https://bitbucket.org/yar3333/haxe-orm default library
+        - install "orm" from bitbucket at branch "default" with sub-directory "library"
 
 
     update - updates libraries listed in hmm.json

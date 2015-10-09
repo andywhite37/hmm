@@ -8,6 +8,5 @@
   "classPath": "src/",
   "releasenote": "Add hg command to install and save libs via Mercurial repos",
   "contributors": ["andywhite37"],
-  "dependencies": {
-  }
+  "dependencies": {}
 }

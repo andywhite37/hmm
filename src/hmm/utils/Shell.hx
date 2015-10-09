@@ -66,6 +66,11 @@ class Shell {
     return haxelib(args);
   }
 
+  public static function haxelibRemove(name : String) : Void {
+    var args = ["remove", name];
+    return haxelib(args);
+  }
+
   public static function haxelibGit(name : String, url : String, ?ref : String, ?dir : String) : Void {
     var args = ["git", name, url];
     if (ref != null) args.push(ref);

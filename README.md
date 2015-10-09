@@ -23,8 +23,13 @@ libraries (both from lib.haxe.org and via git/hg/etc.).
 
 - The `--global` flag is needed to make sure the tool is installed globally.
 - The `setup` command creates a link to the `hmm` tool at `/usr/local/bin/hmm` for ease of use.
-  - If you do not run `setup`, you can use the tool by running:
-    `haxelib run hmm [command] [options]` rather than `hmm [command] [options]`
+- If you do not run `setup`, you can use the tool by running:
+
+`haxelib --global run hmm [command] [options]`
+
+rather than:
+
+`hmm [command] [options]`
 
 # hmm config file (hmm.json)
 
@@ -78,3 +83,78 @@ Each dependency is an object with the following keys:
 - Almost all `hmm` commands should be run from your project root
   directory (where the `hmm.json` file should be located).
 - See `hmm help` for information about specific commands.
+
+`> hmm help`
+
+```sh
+Usage: hmm <command> [options]
+
+commands:
+
+    help - shows a usage message
+
+    version - print hmm version
+
+    setup - creates a symbolic link to hmm at /usr/local/bin/hmm
+
+    init - initializes the current working directory for hmm usage
+
+    install - installs libraries listed in hmm.json
+
+    haxelib - adds a lib.haxe.org-based dependency to hmm.json, and installs the dependency using `haxelib install`
+
+        usage: hmm haxelib <name> [version]
+
+        arguments:
+        - name - the name of the library (required)
+        - version - the version to install (default: "")
+
+        example:
+
+        hmm haxelib thx.core
+        - adds and installs the current version of thx.core (no version specified)
+
+        hmm haxelib thx.core 1.2.3
+        - adds and installs thx.core version 1.2.3
+
+    git - adds a git-based dependency to hmm.json, and installs the dependency using `haxelib git`
+
+        usage: hmm git <name> <url> [ref] [dir]
+
+        arguments:
+        - name - the name of the library (required)
+        - url - the clone url or path to the git repo (required)
+        - ref - the branch name/tag name/committish to use when installing/updating the library (default: "master")
+        - dir - the sub-directory in the git repo where the code is located (default: "")
+
+        ref and sub-directory are optional, however, to specify sub-directory, you must also specify the ref.
+
+        example:
+
+        hmm git thx.core git@github.com:fponticelli/thx.core
+        - assumes ref is "master" and sub-directory is the root of the repo
+
+        hmm git thx.core git@github.com:fponticelli/thx.core some-tag src
+        - assumes ref is "some-tag" and sub-directory is "src"
+
+
+    update - updates libraries listed in hmm.json
+
+    remove - removes one or more library dependencies from hmm.json, and removes them via `haxelib remove`
+
+        usage: hmm remove <name> [name2 name3 ...]
+
+        arguments:
+        - name - the name of the library to remove (required)
+        - name2 name3 ... - additional library names to remove
+
+        example:
+
+        hmm remove thx.core
+        hmm remove thx.core mithril
+
+
+    clean - removes local .haxelib directory
+
+    hmm-update - updates the hmm tool
+```

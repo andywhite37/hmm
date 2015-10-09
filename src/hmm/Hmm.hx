@@ -15,7 +15,10 @@ class Hmm {
       new SetupCommand(),
       new InitCommand(),
       new InstallCommand(),
+      new HaxelibCommand(),
+      new GitCommand(),
       new UpdateCommand(),
+      new RemoveCommand(),
       new CleanCommand(),
       new HmmUpdateCommand(),
       new HmmRemoveCommand(),
@@ -55,8 +58,8 @@ class Hmm {
     Log.println("");
     for (command in commands) {
       Log.println('    ${command.type} - ${command.getUsage()}');
+      Log.println("");
     }
-    Log.println("");
     Sys.exit(1);
   }
 }

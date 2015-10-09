@@ -4,9 +4,9 @@
   "license": "MIT",
   "tags": ["tools", "helpers", "installation"],
   "description": "Local haxelib installation helper",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "classPath": "src/",
-  "releasenote": "Add hg command to install and save libs via Mercurial repos",
+  "releasenote": "Add from-hxml and to-hxml commands for import/export of -lib specs",
   "contributors": ["andywhite37"],
   "dependencies": {}
 }

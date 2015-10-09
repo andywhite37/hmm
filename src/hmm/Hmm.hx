@@ -14,6 +14,8 @@ class Hmm {
       new VersionCommand(),
       new SetupCommand(),
       new InitCommand(),
+      new FromHxmlCommand(),
+      new ToHxmlCommand(),
       new InstallCommand(),
       new HaxelibCommand(),
       new GitCommand(),

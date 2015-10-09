@@ -20,12 +20,12 @@ class Shell {
     if (!HmmConfig.hasHmmJson()) {
       Log.die('${HmmConfig.HMM_JSON_FILE_NAME} not found in current workding directory - aborting.');
     }
-    Log.info('${HmmConfig.HMM_JSON_FILE_NAME} file exists, continuing');
+    //Log.info('${HmmConfig.HMM_JSON_FILE_NAME} file exists, continuing');
   }
 
   public static function createHmmJsonIfNotExists() {
     if (HmmConfig.hasHmmJson()) {
-      Log.info('${HmmConfig.HMM_JSON_FILE_NAME} already exists');
+      //Log.info('${HmmConfig.HMM_JSON_FILE_NAME} already exists');
       return;
     }
     var path = HmmConfig.getHmmJsonPath();
@@ -38,7 +38,7 @@ class Shell {
 
   public static function createLocalHaxelibRepoIfNotExists() : Void {
     if (HmmConfig.hasLocalHaxelibRepo()) {
-      Log.info('local ${HmmConfig.HAXELIB_REPO_DIR_NAME} repo exists, continuing');
+      //Log.info('local ${HmmConfig.HAXELIB_REPO_DIR_NAME} repo exists, continuing');
       return;
     }
     haxelibNewRepo();

@@ -182,9 +182,8 @@ Each dependency is an object with the following keys:
   directory (where the `hmm.json` file should be located).
 - See `hmm help` for information about specific commands.
 
-`> hmm help`
-
 ```sh
+> hmm help
 Usage: hmm <command> [options]
 
 commands:
@@ -196,6 +195,16 @@ commands:
     setup - creates a symbolic link to hmm at /usr/local/bin/hmm
 
     init - initializes the current working directory for hmm usage
+
+    from-hxml - reads -lib lines specified in one or more .hxml files and adds them to hmm.json
+
+        usage: hmm from-hxml <hxml-path> [hxml-path2 hxml-path3 ...]
+
+        example:
+        hmm from-hxml build.hxml
+        - adds dependencies in hmm.json for each -lib line in build.hxml
+
+    to-hxml - dumps the libraries in hmm.json in a `-lib name[:version]` format for use in an .hxml file
 
     install - installs libraries listed in hmm.json
 

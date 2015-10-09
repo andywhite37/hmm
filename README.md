@@ -111,7 +111,7 @@ utest: [1.3.10]
 ### Existing project setup if the project has an hmm.json file
 ```sh
 # Clone a project that is using hmm
-> git clone git@github.com/someuser/someproject
+> git clone git@github.com:someuser/someproject
 > cd someproject
 
 # Install all libs from hmm.json

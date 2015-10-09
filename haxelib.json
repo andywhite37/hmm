@@ -4,9 +4,9 @@
   "license": "MIT",
   "tags": ["tools", "helpers", "installation"],
   "description": "Local haxelib installation helper",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "classPath": "src/",
-  "releasenote": "Add from-hxml and to-hxml commands for import/export of -lib specs",
+  "releasenote": "Fix bug in hmm remove command",
   "contributors": ["andywhite37"],
   "dependencies": {}
 }

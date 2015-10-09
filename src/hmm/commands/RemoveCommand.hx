@@ -15,7 +15,7 @@ class RemoveCommand implements ICommand {
     Shell.ensureHmmJsonExists();
     Shell.createLocalHaxelibRepoIfNotExists();
 
-    if (args.length == 1) {
+    if (args.length == 0) {
       Log.die('$type command requires 1 or more arguments');
     }
 

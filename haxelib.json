@@ -4,9 +4,9 @@
   "license": "MIT",
   "tags": ["tools", "helpers", "installation"],
   "description": "Local haxelib installation helper",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "classPath": "src/",
-  "releasenote": "Fix bug in hmm remove command",
+  "releasenote": "Add check command to check install status of libs",
   "contributors": ["andywhite37"],
   "dependencies": {}
 }

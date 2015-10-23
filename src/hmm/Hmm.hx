@@ -22,6 +22,7 @@ class Hmm {
       new HgCommand(),
       new UpdateCommand(),
       new RemoveCommand(),
+      new CheckCommand(),
       new CleanCommand(),
       new HmmUpdateCommand(),
       new HmmRemoveCommand(),

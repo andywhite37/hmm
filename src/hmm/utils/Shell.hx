@@ -4,6 +4,8 @@ import haxe.Json;
 import haxe.io.Path;
 import sys.FileSystem;
 import sys.io.File;
+import sys.io.Process;
+using StringTools;
 using hmm.utils.AnsiColors;
 
 class Shell {
@@ -89,6 +91,30 @@ class Shell {
     haxelib(["list"]);
   }
 
+  public static function haxelibPath(libraryName : String) : { isInstalled: Bool, ?path: String, ?libraryName: String, ?version: String } {
+    var process = new Process("haxelib", ["path", libraryName]);
+    var outputString = process.stdout.readAll().toString();
+    var outputLines = outputString.split("\n");
+    var result = { isInstalled: false, path: null, libraryName: null, version: null };
+    for (outputLine in outputLines) {
+      if (~/is not installed/i.match(outputLine)) {
+        result.isInstalled = false;
+        return result;
+      } else if (outputLine.startsWith("/")) {
+        result.isInstalled = true;
+        result.path = outputLine;
+      } else {
+        result.isInstalled = true;
+        var regex = ~/^\s*-D\s*(.*)=(.*)\s*$/;
+        if (regex.match(outputLine)) {
+          result.libraryName = regex.matched(1);
+          result.version = regex.matched(2);
+        }
+      }
+    }
+    return result;
+  }
+
   public static function haxelib(args : Array<String>) : Void {
     command("haxelib", args);
   }
@@ -107,6 +133,14 @@ class Shell {
   public static function removeHmm() {
     command("sudo", ["rm", hmm.commands.SetupCommand.HMM_LINK_PATH]);
     haxelib(["--global", "remove", "hmm"]);
+  }
+
+  public static function gitRevParse(path : String, ref : String) : String {
+    var oldCwd = Shell.workingDirectory;
+    Sys.setCwd(path);
+    var hash = new Process("git", ["rev-parse", ref]).stdout.readAll().toString().replace("\n", "");
+    Sys.setCwd(oldCwd);
+    return hash;
   }
 
   public static function command(cmd : String, ?args : Array<String>) : Void {

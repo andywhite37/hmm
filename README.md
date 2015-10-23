@@ -279,6 +279,8 @@ commands:
         hmm remove thx.core mithril
 
 
+    check - checks if the current .haxelib installations match the hmm.json-specified versions/refs/etc.
+
     clean - removes local .haxelib directory
 
     hmm-update - updates the hmm tool

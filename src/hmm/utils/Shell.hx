@@ -67,7 +67,7 @@ class Shell {
   }
 
   public static function haxelibInstall(name : String, version : Option<String>, options: ShellOptions) : Void {
-    var args = ["install", name].concat(version.toArray());
+    var args = ["install", "--never", name].concat(version.toArray());
     return haxelib(args, options);
   }
 

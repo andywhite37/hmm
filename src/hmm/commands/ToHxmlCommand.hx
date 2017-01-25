@@ -1,5 +1,6 @@
 package hmm.commands;
 
+import hmm.HmmConfig;
 import hmm.utils.Log;
 import hmm.utils.Shell;
 
@@ -11,13 +12,13 @@ class ToHxmlCommand implements ICommand {
 
   public function run(args : Array<String>) {
     Shell.ensureHmmJsonExists();
-
-    var config = HmmConfig.readHmmJson();
-
+    var config = HmmConfigs.readHmmJsonOrThrow();
     for (lib in config.dependencies) {
-      var str = switch lib.type {
-        case Haxelib: lib.version != null ? '${lib.name}:${lib.version}' : '${lib.name}';
-        case Git | Mercurial: lib.name;
+      var str = switch lib {
+        case Haxelib(name, Some(version)): '${name}:${version}';
+        case Haxelib(name, None) : '${name}';
+        case Git(name, _, _, _) : '${name}'; // can't provide version info for git dep
+        case Mercurial(name, _, _, _) : '${name}'; // can't provide version info for mercurial dep
       };
       Log.println('-lib $str');
     }

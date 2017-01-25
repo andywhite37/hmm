@@ -1,9 +1,12 @@
 package hmm.commands;
 
-import hmm.utils.Shell;
-import hmm.utils.Log;
 import sys.FileSystem;
 import sys.io.File;
+
+import hmm.HmmConfig;
+import hmm.errors.ValidationError;
+import hmm.utils.Shell;
+import hmm.utils.Log;
 
 class RemoveCommand implements ICommand {
   public var type(default, null) = "remove";
@@ -16,15 +19,15 @@ class RemoveCommand implements ICommand {
     Shell.createLocalHaxelibRepoIfNotExists();
 
     if (args.length == 0) {
-      Log.die('$type command requires 1 or more arguments');
+      throw new ValidationError('$type command requires 1 or more library name arguments', 1);
     }
 
     for (name in args) {
-      HmmConfig.removeDependency(name);
-      Shell.haxelibRemove(name);
+      HmmConfigs.removeDependencyOrThrow(name);
+      Shell.haxelibRemove(name, { log: true, throwError: true });
     }
 
-    Shell.haxelibList();
+    Shell.haxelibList({ log: true, throwError: true });
   }
 
   public function getUsage() {

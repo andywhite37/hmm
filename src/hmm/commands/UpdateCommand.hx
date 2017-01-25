@@ -1,8 +1,11 @@
 package hmm.commands;
 
-import hmm.utils.Shell;
 import sys.FileSystem;
 import sys.io.File;
+
+import hmm.HmmConfig;
+import hmm.LibraryConfig;
+import hmm.utils.Shell;
 
 class UpdateCommand implements ICommand {
   public var type(default, null) = "update";
@@ -13,14 +16,11 @@ class UpdateCommand implements ICommand {
   public function run(args : Array<String>) {
     Shell.ensureHmmJsonExists();
     Shell.createLocalHaxelibRepoIfNotExists();
-
-    var config = HmmConfig.readHmmJson();
-
+    var config = HmmConfigs.readHmmJsonOrThrow();
     for (library in config.dependencies) {
-      Shell.haxelibUpdate(library.name);
+      Shell.haxelibUpdate(LibraryConfigs.getName(library), { log: true, throwError: true });
     }
-
-    Shell.haxelibList();
+    Shell.haxelibList({ log: true, throwError: true });
   }
 
   public function getUsage() {

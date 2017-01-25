@@ -1,10 +1,16 @@
 package hmm.commands;
 
-import hmm.HmmConfig;
-import hmm.utils.Log;
-import hmm.utils.Shell;
+import haxe.ds.Option;
+
 import sys.FileSystem;
 import sys.io.File;
+
+import thx.Options;
+
+import hmm.HmmConfig;
+import hmm.errors.ValidationError;
+import hmm.utils.Log;
+import hmm.utils.Shell;
 
 class FromHxmlCommand implements ICommand {
   public var type = "from-hxml";
@@ -16,18 +22,18 @@ class FromHxmlCommand implements ICommand {
     Shell.ensureHmmJsonExists();
 
     if (args.length == 0) {
-      Log.die('$type requires at least one argument (path to .hxml file)');
+      throw new ValidationError('$type requires at least one argument (path to .hxml file)', 1);
     }
 
     for (path in args) {
       var libs = readLibsFromHxml(path);
       for (lib in libs) {
-        HmmConfig.addHaxelibDependency(lib.name, lib.version);
+        HmmConfigs.addDependency(Haxelib(lib.name, lib.version));
       }
     }
   }
 
-  function readLibsFromHxml(path : String) : Array<{ name: String, ?version : String }> {
+  function readLibsFromHxml(path : String) : Array<{ name: String, version : Option<String> }> {
     var content = File.getContent(path);
 
     var lines = content.split("\n");
@@ -41,9 +47,9 @@ class FromHxmlCommand implements ICommand {
         regex.match(line);
         var name = regex.matched(1);
         var version = try {
-          regex.matched(3);
+          Some(regex.matched(3));
         } catch (e : Dynamic) {
-          "";
+          None;
         }
         return {
           name: name,

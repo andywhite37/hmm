@@ -1,5 +1,8 @@
 package hmm.commands;
 
+import thx.Nil;
+import thx.Validation;
+
 interface ICommand {
   public var type(default, null) : String;
 

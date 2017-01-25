@@ -1,14 +1,22 @@
 package hmm.commands;
 
-import hmm.utils.Shell;
-import hmm.utils.Log;
+using StringTools;
+import haxe.ds.Option;
+
 import sys.FileSystem;
 import sys.io.File;
 
+using thx.Functions;
+using thx.Options;
+
+import hmm.HmmConfig;
+import hmm.LibraryConfig;
+import hmm.errors.ValidationError;
+import hmm.utils.Shell;
+import hmm.utils.Log;
+
 class HaxelibCommand implements ICommand {
   public var type(default, null) = "haxelib";
-
-  public static var DEFAULT_VERSION = "";
 
   public function new() {
   }
@@ -18,19 +26,19 @@ class HaxelibCommand implements ICommand {
     Shell.createLocalHaxelibRepoIfNotExists();
 
     if (args.length < 1 || args.length > 2) {
-      Log.die('$type command requires 1 or 2 arguments (<name> [version])');
+      throw new ValidationError('$type command requires 1 or 2 arguments (<name> [version])', 1);
     }
 
-    var name = args[0];
-    var version = DEFAULT_VERSION;
+    var name : String = args[0];
+    var version : Option<String> = None;
 
     if (args.length == 2) {
-      version = args[1];
+      version = Options.ofValue(args[1]).filter.fn(_.trim() != "");
     }
 
-    HmmConfig.addHaxelibDependency(name, version);
-    Shell.haxelibInstall(name, version);
-    Shell.haxelibList();
+    HmmConfigs.addDependencyOrThrow(Haxelib(name, version));
+    Shell.haxelibInstall(name, version, { log: true, throwError: true });
+    Shell.haxelibList({ log: true, throwError: true });
   }
 
   public function getUsage() {
@@ -40,7 +48,7 @@ class HaxelibCommand implements ICommand {
 
         arguments:
         - name - the name of the library (required)
-        - version - the version to install (default: "")
+        - version - the version to install (optional)
 
         example:
 

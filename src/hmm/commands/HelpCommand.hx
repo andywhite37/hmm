@@ -9,10 +9,28 @@ class HelpCommand implements ICommand {
   }
 
   public function run(args : Array<String>) {
-    Hmm.printUsageAndExit();
+    if (args.length == 0) {
+      Hmm.printUsageAndExit(0);
+    } else {
+      Hmm.printUsagesAndExit(args, 0);
+    }
   }
 
   public function getUsage() {
-    return "shows a usage message";
+    return 'shows a usage message
+
+        usage:
+
+        hmm help [names]
+
+        arguments:
+        - (optional) [names] - zero or more command names
+
+        examples:
+
+        hmm help
+        hmm help clean
+        hmm help clean check
+';
   }
 }

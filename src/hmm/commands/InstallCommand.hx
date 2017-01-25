@@ -1,8 +1,10 @@
 package hmm.commands;
 
-import hmm.utils.Shell;
 import sys.FileSystem;
 import sys.io.File;
+
+import hmm.HmmConfig;
+import hmm.utils.Shell;
 
 class InstallCommand implements ICommand {
   public var type(default, null) = "install";
@@ -13,21 +15,18 @@ class InstallCommand implements ICommand {
   public function run(args : Array<String>) {
     Shell.ensureHmmJsonExists();
     Shell.createLocalHaxelibRepoIfNotExists();
-
-    var config = HmmConfig.readHmmJson();
-
+    var config = HmmConfigs.readHmmJsonOrThrow();
     for (library in config.dependencies) {
       install(library);
     }
-
-    Shell.haxelibList();
+    Shell.haxelibList({ log: true, throwError: true });
   }
 
   function install(library : LibraryConfig) {
-    return switch library.type {
-      case Haxelib: Shell.haxelibInstall(library.name, library.version);
-      case Git: Shell.haxelibGit(library.name, library.url, library.ref, library.dir);
-      case Mercurial: Shell.haxelibHg(library.name, library.url, library.ref, library.dir);
+    return switch library {
+      case Haxelib(name, version): Shell.haxelibInstall(name, version, { log: true, throwError: true });
+      case Git(name, url, ref, dir): Shell.haxelibGit(name, url, ref, dir, { log: true, throwError: true });
+      case Mercurial(name, url, ref, dir): Shell.haxelibHg(name, url, ref, dir, { log: true, throwError: true });
     };
   }
 

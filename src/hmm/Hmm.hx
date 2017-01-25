@@ -1,70 +1,93 @@
 package hmm;
 
+using Lambda;
+
+using thx.Functions;
+
 import hmm.commands.*;
+import hmm.errors.*;
 import hmm.utils.Log;
 import hmm.utils.Shell;
-using Lambda;
 
 class Hmm {
   public static var commands(default, null) : Array<ICommand>;
 
   public static function main() {
-    commands = [
-      new HelpCommand(),
-      new VersionCommand(),
-      new SetupCommand(),
-      new InitCommand(),
-      new FromHxmlCommand(),
-      new ToHxmlCommand(),
-      new InstallCommand(),
-      new HaxelibCommand(),
-      new GitCommand(),
-      new HgCommand(),
-      new UpdateCommand(),
-      new RemoveCommand(),
-      new CheckCommand(),
-      new CleanCommand(),
-      new HmmUpdateCommand(),
-      new HmmRemoveCommand(),
-    ];
+    try {
+      commands = [
+        new HelpCommand(),
+        new VersionCommand(),
+        new SetupCommand(),
+        new InitCommand(),
+        new FromHxmlCommand(),
+        new ToHxmlCommand(),
+        new InstallCommand(),
+        new ReinstallCommand(),
+        new HaxelibCommand(),
+        new GitCommand(),
+        new HgCommand(),
+        new UpdateCommand(),
+        new RemoveCommand(),
+        new CheckCommand(),
+        new CleanCommand(),
+        new HmmUpdateCommand(),
+        new HmmRemoveCommand(),
+      ];
 
-    var args = Sys.args();
+      var args = Sys.args().copy();
 
-    Shell.init({
-      hmmDirectory: Sys.getCwd(),
-      workingDirectory: args.pop()
-    });
+      Shell.init({
+        hmmDirectory: Sys.getCwd(),
+        workingDirectory: args.pop()
+      });
 
-    var commandType = args.shift();
+      var commandType = args.shift();
+      if (commandType == null) {
+        throw new ValidationError('no command given', 1);
+      }
 
-    var command = commands.find(function(command) {
-      return command.type == commandType;
-    });
+      var command = commands.find(function(command) {
+        return command.type == commandType;
+      });
 
-    if (command == null) {
-      Log.error('invalid command: $commandType');
-      printUsageAndExit();
-      Sys.exit(1);
+      if (command == null) {
+        throw new ValidationError('unrecognized command: $commandType', 1);
+      }
+
+      command.run(args);
+    } catch (e : ValidationError) {
+      die('Validation error: ${e.message}', e.statusCode);
+    } catch (e : SystemError) {
+      die('Execution error: ${e.message}', e.statusCode);
+    } catch (e : Dynamic) {
+      die('Unexpected error: $e', 1);
     }
-
-    //Log.info("hmm");
-    //Log.info('working directory:  ${Shell.workingDirectory}');
-    //Log.info('hmm directory:      ${Shell.hmmDirectory}');
-    //Log.info('command:            $commandType');
-
-    command.run(args);
   }
 
-  public static function printUsageAndExit() {
+  static function die(message : String, statusCode : Int) : Void {
+    Log.error(message);
+    Log.println('Use "hmm help" to see usage');
+    Sys.exit(statusCode);
+  }
+
+  public static function printUsageAndExit(statusCode : Int) : Void {
     Log.println("Usage: hmm <command> [options]");
     Log.println("");
     Log.println("commands:");
     Log.println("");
-    for (command in commands) {
+    printUsagesAndExit(commands.map.fn(_.type), statusCode);
+  }
+
+  public static function printUsagesAndExit(types : Array<String>, statusCode : Int) : Void {
+    for (type in types) {
+      var command = commands.find.fn(_.type == type);
+      if (command == null) {
+        throw new ValidationError('invalid command: $type', 1);
+      }
       Log.println('    ${command.type} - ${command.getUsage()}');
       Log.println("");
     }
-    Sys.exit(1);
+    Sys.exit(statusCode);
   }
 }
 

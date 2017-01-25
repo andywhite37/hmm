@@ -24,7 +24,7 @@ class RemoveCommand implements ICommand {
 
     for (name in args) {
       HmmConfigs.removeDependencyOrThrow(name);
-      Shell.haxelibRemove(name, { log: true, throwError: true });
+      Shell.haxelibRemove(name, { log: true, throwError: false });
     }
 
     Shell.haxelibList({ log: true, throwError: true });

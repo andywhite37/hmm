@@ -26,6 +26,7 @@ class Hmm {
         new HaxelibCommand(),
         new GitCommand(),
         new HgCommand(),
+        new DevCommand(),
         new UpdateCommand(),
         new RemoveCommand(),
         new CheckCommand(),

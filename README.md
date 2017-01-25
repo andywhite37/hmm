@@ -1,8 +1,8 @@
 # Haxe Module Manager (`hmm`)
 
 `hmm` is a small helper for `haxelib` that allows you to specify, install,
-and update project dependencies using lib.haxe.org libraries, git, or
-mercurial repositories.
+and update project dependencies using `lib.haxe.org` libraries, `git`,
+`mercurial`, or `dev` (local path reference) libraries.
 
 This exists because `haxelib` does not yet support specifying git, mercurial,
 or other non `haxelib`-based project dependencies in the `haxelib.json`,
@@ -129,6 +129,22 @@ utest: [1.3.10]
 > hmm install
 ```
 
+### Dependency updates/changes
+
+```sh
+# Update dependencies from hmm.json that are not already installed at the specified version
+> hmm reinstall
+
+# Update all dependencies in hmm.json, even if they are already installed at the right version
+> hmm reinstall -f
+
+# Update a few dependencies, but only if the current install of each does not match the specified version in hmm.json
+> hmm reinstall mylib1 mylib2
+
+# Update a few dependencies, even if the current install of each matches the specified version in hmm.json
+> hmm reinstall --force mylib1 mylib2
+```
+
 # Project config file (hmm.json)
 
 `hmm` requires a `hmm.json` file in the root of your project, which
@@ -148,19 +164,27 @@ Example `hmm.json`:
       "name": "thx.promise",
       "type": "git",
       "url": "git@github.com:fponticelli/thx.promise",
-      "ref": "master",
+      "ref": "master", // Note: while it works, it's considered a bad practice to reference a branch - better to reference a tag, commit, or other non-changing reference
       "dir": "src"
     },
     {
       "name": "svg2ppt",
       "type": "git",
-      "url": "git@github-pellucid:pellucidanalytics/svg2ppt",
-      "ref": "master",
+      "url": "git@github.com:pellucidanalytics/svg2ppt",
+      "ref": "ae94bdc",
       "dir": "src"
     },
     {
       "name": "mithril",
       "type": "haxelib"
+      // Note: while this works, it's considered a bad practice to reference a library without specifying the version
+    },
+    {
+      // Note: "dev" dependencies are allowed for convenience, but not considered ideal,
+      // because they do not specify any versioning, and requires others to have the same local directory
+      "name": "mylib",
+      "type": "dev",
+      "path": "/my/path/mylib"
     }
   ]
 }
@@ -168,122 +192,24 @@ Example `hmm.json`:
 
 Each dependency is an object with the following keys:
 
-- `name` - the name of the Haxe library
-- `type` - one of `haxelib`, `git`, or `hg`
-- `version` - the haxelib library version (for `haxelib` libs)
-- `url` - the git/hg URL (for `git` or `hg` libs)
-- `ref` - the git/hg ref (branch, commit, tag, etc.) (for `git` and `hg`
-  installs)
-- `dir` - the root classpath directory (for `git` and `hg` installs)
+- `name` - (required) the name of the Haxe library
+- `type` - (required) one of `haxelib`, `git`, `hg`, or `dev`
+
+For `type` `haxelib`, the following additional properties are used:
+- `version` - (optional) the haxelib library version
+
+For `type` `git` or `mercurial`, the following additional properties are used:
+
+- `url` - (required) the git/hg URL
+- `ref` - (optional) the git/hg ref (branch, commit, tag, etc.)
+- `dir` - (optional) the root classpath directory
+
+For `type` `dev`, the following additional properties are used:
+
+- `path` - (required) the file system path to the code
 
 # Commands
 
 - Almost all `hmm` commands should be run from your project root
   directory (where the `hmm.json` file should be located).
 - See `hmm help` for information about specific commands.
-
-```sh
-> hmm help
-Usage: hmm <command> [options]
-
-commands:
-
-    help - shows a usage message
-
-    version - print hmm version
-
-    setup - creates a symbolic link to hmm at /usr/local/bin/hmm
-
-    init - initializes the current working directory for hmm usage
-
-    from-hxml - reads -lib lines specified in one or more .hxml files and adds them to hmm.json
-
-        usage: hmm from-hxml <hxml-path> [hxml-path2 hxml-path3 ...]
-
-        example:
-        hmm from-hxml build.hxml
-        - adds dependencies in hmm.json for each -lib line in build.hxml
-
-    to-hxml - dumps the libraries in hmm.json in a `-lib name[:version]` format for use in an .hxml file
-
-    install - installs libraries listed in hmm.json
-
-    haxelib - adds a lib.haxe.org-based dependency to hmm.json, and installs the dependency using `haxelib install`
-
-        usage: hmm haxelib <name> [version]
-
-        arguments:
-        - name - the name of the library (required)
-        - version - the version to install (default: "")
-
-        example:
-
-        hmm haxelib thx.core
-        - adds and installs the current version of thx.core (no version specified)
-
-        hmm haxelib thx.core 1.2.3
-        - adds and installs thx.core version 1.2.3
-
-    git - adds a git-based dependency to hmm.json, and installs the dependency using `haxelib git`
-
-        usage: hmm git <name> <url> [ref] [dir]
-
-        arguments:
-        - name - the name of the library (required)
-        - url - the clone url or path to the git repo (required)
-        - ref - the branch name/tag name/committish to use when installing/updating the library (default: "master")
-        - dir - the sub-directory in the git repo where the code is located (default: "")
-
-        ref and sub-directory are optional, however, to specify sub-directory, you must also specify the ref.
-
-        example:
-
-        hmm git thx.core git@github.com:fponticelli/thx.core
-        - assumes ref is "master" and sub-directory is the root of the repo
-
-        hmm git thx.core git@github.com:fponticelli/thx.core some-tag src
-        - assumes ref is "some-tag" and sub-directory is "src"
-
-
-    hg - adds a hg-based dependency to hmm.json, and installs the dependency using `haxelib hg`
-
-        usage: hmm hg <name> <url> [ref] [dir]
-
-        arguments:
-        - name - the name of the library (required)
-        - url - the clone url or path to the hg repo (required)
-        - ref - the branch name/tag name/committish to use when installing/updating the library (default: "default")
-        - dir - the sub-directory in the hg repo where the code is located (default: "")
-
-        ref and sub-directory are optional, however, to specify sub-directory, you must also specify the ref.
-
-        example:
-
-        hmm hg orm https://bitbucket.org/yar3333/haxe-orm default library
-        - install "orm" from bitbucket at branch "default" with sub-directory "library"
-
-
-    update - updates libraries listed in hmm.json
-
-    remove - removes one or more library dependencies from hmm.json, and removes them via `haxelib remove`
-
-        usage: hmm remove <name> [name2 name3 ...]
-
-        arguments:
-        - name - the name of the library to remove (required)
-        - name2 name3 ... - additional library names to remove
-
-        example:
-
-        hmm remove thx.core
-        hmm remove thx.core mithril
-
-
-    check - checks if the current .haxelib installations match the hmm.json-specified versions/refs/etc.
-
-    clean - removes local .haxelib directory
-
-    hmm-update - updates the hmm tool
-
-    hmm-remove - removes the hmm tool
-```

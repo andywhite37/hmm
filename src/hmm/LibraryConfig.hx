@@ -7,6 +7,7 @@ import haxe.ds.Option;
 import thx.Either;
 using thx.Functions;
 import thx.Functions.*;
+import thx.Nel;
 using thx.Options;
 import thx.Validation;
 import thx.Validation.*;
@@ -19,18 +20,21 @@ enum LibraryConfig {
   Haxelib(name : String, version: Option<String>);
   Git(name : String, url: String, ref: Option<String>, dir: Option<String>);
   Mercurial(name : String, url: String, ref: Option<String>, dir: Option<String>);
+  Dev(name : String, path : String);
 }
 
 class LibraryConfigs {
   static inline var HAXELIB_TYPE = "haxelib";
   static inline var GIT_TYPE = "git";
   static inline var MERCURIAL_TYPE = "hg";
+  static inline var DEV_TYPE = "dev";
 
   public static function getName(lib : LibraryConfig) : String {
     return switch lib {
       case Haxelib(name, _) : name;
       case Git(name, _, _, _) : name;
       case Mercurial(name, _, _, _) : name;
+      case Dev(name, _) : name;
     };
   }
 
@@ -49,6 +53,7 @@ class LibraryConfigs {
           case HAXELIB_TYPE : deserializeHaxelib(v);
           case GIT_TYPE : deserializeGit(v);
           case MERCURIAL_TYPE | "mercurial" : deserializeMercurial(v);
+          case DEV_TYPE : deserializeDev(v);
           case unk : failureNel('unrecognized library type: $unk');
         };
       });
@@ -59,6 +64,7 @@ class LibraryConfigs {
       case Haxelib(name, version) : { type: HAXELIB_TYPE, name: name, version: version.get() };
       case Git(name, url, ref, dir) : { type: GIT_TYPE, name: name, url: url, ref: ref.get(), dir: dir.get() };
       case Mercurial(name, url, ref, dir) : { type: MERCURIAL_TYPE, name: name, url: url, ref: ref.get(), dir: dir.get() };
+      case Dev(name, path) : { type: DEV_TYPE, name: name, path: path };
     };
   }
 
@@ -67,7 +73,7 @@ class LibraryConfigs {
       Haxelib,
       parseProperty(v, "name", parseString, identity),
       parseOptionalStringProperty(v, "version"),
-      thx.Nel.semigroup()
+      Nel.semigroup()
     );
   }
 
@@ -78,7 +84,7 @@ class LibraryConfigs {
       parseProperty(v, "url", parseString, identity),
       parseOptionalStringProperty(v, "ref"),
       parseOptionalStringProperty(v, "dir"),
-      thx.Nel.semigroup()
+      Nel.semigroup()
     );
   }
 
@@ -89,7 +95,16 @@ class LibraryConfigs {
       parseProperty(v, "url", parseString, identity),
       parseOptionalProperty(v, "ref", parseString),
       parseOptionalProperty(v, "dir", parseString),
-      thx.Nel.semigroup()
+      Nel.semigroup()
+    );
+  }
+
+  static function deserializeDev(v : Dynamic) : VNel<String, LibraryConfig> {
+    return val2(
+      Dev,
+      parseProperty(v, "name", parseString, identity),
+      parseProperty(v, "path", parseString, identity),
+      Nel.semigroup()
     );
   }
 

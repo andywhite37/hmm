@@ -27,6 +27,7 @@ class InstallCommand implements ICommand {
       case Haxelib(name, version): Shell.haxelibInstall(name, version, { log: true, throwError: true });
       case Git(name, url, ref, dir): Shell.haxelibGit(name, url, ref, dir, { log: true, throwError: true });
       case Mercurial(name, url, ref, dir): Shell.haxelibHg(name, url, ref, dir, { log: true, throwError: true });
+      case Dev(name, path) : Shell.haxelibDev(name, path, { log: true, throwError: true });
     };
   }
 

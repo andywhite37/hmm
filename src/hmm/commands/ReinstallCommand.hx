@@ -65,13 +65,14 @@ class ReinstallCommand implements ICommand {
       case Haxelib(name, version): reinstallHaxelib(name, version, force);
       case Git(name, url, ref, dir): reinstallGit(name, url, ref, dir, force);
       case Mercurial(name, url, ref, dir): reinstallMercurial(name, url, ref, dir, force);
+      case Dev(name, path) : reinstallDev(name, path, force);
     };
   }
 
   function reinstallHaxelib(name : String, version : Option<String>, force : Bool) {
     if (force || !Shell.isAlreadyInstalledHaxelib(name, version, { log: false, throwError: true })) {
       Log.info('reinstalling haxelib library: $name at version $version');
-      Shell.haxelibRemove(name, { log: false, throwError: false });
+      Shell.haxelibRemove(name, { log: true, throwError: false });
       Shell.haxelibInstall(name, version, { log: true, throwError: false });
     } else {
       Log.info('haxelib library "$name" (version: ${version.getOrElse('N/A')}) already installed');
@@ -81,7 +82,7 @@ class ReinstallCommand implements ICommand {
   function reinstallGit(name : String, url : String, ref : Option<String>, dir : Option<String>, force: Bool) {
     if (force || !Shell.isAlreadyInstalledGit(name, url, ref, dir, { log: false, throwError: true })) {
       Log.info('reinstalling git library: $name from $url (ref: $ref, dir: $dir)');
-      Shell.haxelibRemove(name, { log: false, throwError: false });
+      Shell.haxelibRemove(name, { log: true, throwError: false });
       Shell.haxelibGit(name, url, ref, dir, { log: true, throwError: true });
     } else {
       Log.info('git library "$name" (url: $url, ref: ${ref.getOrElse('N/A')}, dir: ${dir.getOrElse("N/A")}) already installed');
@@ -89,12 +90,22 @@ class ReinstallCommand implements ICommand {
   }
 
   function reinstallMercurial(name : String, url : String, ref : Option<String>, dir : Option<String>, force: Bool) {
-    if (force || Shell.isAlreadyInstalledMercurial(name, url, ref, dir, { log: false, throwError: true })) {
+    if (force || !Shell.isAlreadyInstalledMercurial(name, url, ref, dir, { log: false, throwError: true })) {
       Log.info('reinstalling hg library: $name from $url (ref: $ref, dir: $dir)');
-      Shell.haxelibRemove(name, { log: false, throwError: false });
+      Shell.haxelibRemove(name, { log: true, throwError: false });
       Shell.haxelibHg(name, url, ref, dir, { log: true, throwError: true });
     } else {
       Log.info('hg library "$name" (url: $url, ref: ${ref.getOrElse('N/A')}, dir: ${dir.getOrElse("N/A")}) already installed');
+    }
+  }
+
+  function reinstallDev(name : String, path : String, force: Bool) : Void {
+    if (force || !Shell.isAlreadyInstalledDev(name, path, { log: false, throwError: true })) {
+      Log.info('reinstalling dev library: $name (path: $path)');
+      Shell.haxelibRemove(name, { log: true, throwError: false });
+      Shell.haxelibDev(name, path, { log: true, throwError: true });
+    } else {
+      Log.info('dev library "$name" (path: $path) already installed');
     }
   }
 

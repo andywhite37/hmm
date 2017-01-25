@@ -19,6 +19,7 @@ class ToHxmlCommand implements ICommand {
         case Haxelib(name, None) : '${name}';
         case Git(name, _, _, _) : '${name}'; // can't provide version info for git dep
         case Mercurial(name, _, _, _) : '${name}'; // can't provide version info for mercurial dep
+        case Dev(name, _) : '${name}';
       };
       Log.println('-lib $str');
     }

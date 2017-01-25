@@ -67,7 +67,7 @@ class Shell {
   }
 
   public static function haxelibInstall(name : String, version : Option<String>, options: ShellOptions) : Void {
-    var args = ["install", "--never", name].concat(version.toArray());
+    var args = ["install", name].concat(version.toArray());
     return haxelib(args, options);
   }
 
@@ -89,6 +89,11 @@ class Shell {
   public static function haxelibHg(name : String, url : String, ref : Option<String>, dir : Option<String>, options: ShellOptions) : Void {
     var args = ["hg", name, url].concat(ref.toArray()).concat(dir.toArray());
     haxelib(args, options);
+  }
+
+  public static function haxelibDev(name : String, path : String, options: ShellOptions) : Void {
+    var args = ["dev", name, path];
+    return haxelib(args, options);
   }
 
   public static function haxelibList(options: ShellOptions) : Void {
@@ -124,7 +129,8 @@ class Shell {
   }
 
   public static function haxelib(args : Array<String>, options: ShellOptions) : Void {
-    runCommand("haxelib", args, options);
+    // Always pass the --never option to haxelib, to answer no to all questions
+    runCommand("haxelib", ["--never"].concat(args), options);
   }
 
   public static function isAlreadyInstalled(library : LibraryConfig, options: ShellOptions) : Bool {
@@ -132,6 +138,7 @@ class Shell {
       case Haxelib(name, version) : isAlreadyInstalledHaxelib(name, version, options);
       case Git(name, url, ref, dir) : isAlreadyInstalledGit(name, url, ref, dir, options);
       case Mercurial(name, url, ref, dir) : isAlreadyInstalledMercurial(name, url, ref, dir, options);
+      case Dev(name, path) : isAlreadyInstalledDev(name, path, options);
     };
   }
 
@@ -229,6 +236,23 @@ class Shell {
       Log.warning('hg library "$name" has ref: "$ref" - hg installation check not yet implemented)');
     }
     return false;
+  }
+
+  public static function isAlreadyInstalledDev(name : String, path : String, options: ShellOptions) : Bool {
+    var haxelibPathResult = haxelibPath(name, { log: false, throwError: false });
+    return if (haxelibPathResult.statusCode != 0) {
+      if (options.log) {
+        Log.warning('"haxelib path $name" failed - assuming library is not installed');
+      }
+      false;
+    } else if (!haxelibPathResult.isInstalled) {
+      if (options.log) {
+        Log.warning('dev library "$name" does not appear to be installed');
+      }
+      false;
+    } else {
+      true;
+    }
   }
 
   public static function createHmmLink(realPath : String, linkPath : String) : Void {

@@ -4,9 +4,9 @@
   "license": "MIT",
   "tags": ["tools", "helpers", "installation"],
   "description": "Local haxelib installation helper",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "classPath": "src/",
-  "releasenote": "Add check command to check install status of libs",
+  "releasenote": "Add smarter reinstall command, and refactor to try to better handle errors",
   "contributors": ["andywhite37"],
   "dependencies": {
     "utest": "1.5.0",

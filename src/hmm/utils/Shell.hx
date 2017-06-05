@@ -21,13 +21,22 @@ typedef ShellOptions = {
   throwError: Bool
 };
 
+typedef ShellInitOptions = {
+  hmmDirectory : String, 
+  workingDirectory : String,
+  isWin : Bool
+}
+
 class Shell {
   public static var hmmDirectory(default, default) : String;
   public static var workingDirectory(default, default) : String;
+  public static var isWin(default, default) : Bool;
 
-  public static function init(options : { hmmDirectory : String, workingDirectory : String}) : Void {
+  public static function init(options : ShellInitOptions) : Void {
     hmmDirectory = options.hmmDirectory;
     workingDirectory = options.workingDirectory;
+    isWin = options.isWin;
+    AnsiColors.disabled = isWin;
     setCwd(workingDirectory, { log: false });
   }
 
@@ -105,21 +114,22 @@ class Shell {
     var outputString = commandResult.stdout;
     var outputLines = outputString.split("\n");
     var result = { statusCode: commandResult.statusCode, isInstalled: false, path: null, libraryName: null, version: null };
-    for (outputLine in outputLines) {
-      if (~/is not installed/i.match(outputLine)) {
+    var notInstalledRegex = ~/is not installed/i;
+    var versionRegex = ~/^\s*-D\s*(.*)=(.*)\s*$/;
+    var pathRegex = ~/^(\/|[A-Z]:)/;
+    for (line in outputLines) {
+      var outputLine = line.trim();
+      if (notInstalledRegex.match(outputLine)) {
         result.isInstalled = false;
         return result;
       }
       result.isInstalled = true;
-      if (outputLine.trim().startsWith("/") && result.path == null) {
+      if (result.path == null && pathRegex.match(outputLine)) {
         // capture the path to the library if it has not yet been captured
         result.path = outputLine;
-      } else if (outputLine.trim().startsWith("-D") && result.libraryName == null && result.version == null) {
-        var regex = ~/^\s*-D\s*(.*)=(.*)\s*$/;
-        if (regex.match(outputLine)) {
-          result.libraryName = regex.matched(1);
-          result.version = regex.matched(2);
-        }
+      } else if (result.libraryName == null && result.version == null && versionRegex.match(outputLine)) {
+        result.libraryName = versionRegex.matched(1);
+        result.version = versionRegex.matched(2);
       }
       if (result.isInstalled && result.path != null && result.libraryName != null && result.version != null) {
         return result;
@@ -256,10 +266,15 @@ class Shell {
   }
 
   public static function createHmmLink(realPath : String, linkPath : String) : Void {
-    // TODO: windows support?
-    runCommand("chmod", ["+x", realPath], { log: true, throwError: true });
-    runCommand("sudo", ["rm", linkPath], { log: true, throwError: false });
-    runCommand("sudo", ["ln", "-s", realPath, linkPath], { log: true, throwError: true });
+    if (isWin) {
+      var safeRealPath = realPath.replace("/", "\\");
+      var safeLinkPath = linkPath.replace("/", "\\");
+      runCommand("copy", ["/Y", safeRealPath, safeLinkPath], { log: true, throwError: true });
+    } else {
+      runCommand("chmod", ["+x", realPath], { log: true, throwError: true });
+      runCommand("sudo", ["rm", linkPath], { log: true, throwError: false });
+      runCommand("sudo", ["ln", "-s", realPath, linkPath], { log: true, throwError: true });
+    }
   }
 
   public static function updateHmm() {
@@ -268,8 +283,12 @@ class Shell {
   }
 
   public static function removeHmm() {
-    // TODO: windows support?
-    runCommand("sudo", ["rm", hmm.commands.SetupCommand.HMM_LINK_PATH], { log: true, throwError: true });
+    var linkPath = hmm.commands.SetupCommand.getLinkPath();
+    if (isWin) {
+      runCommand("del", [linkPath], { log: true, throwError: true });
+    } else {
+      runCommand("sudo", ["rm", linkPath], { log: true, throwError: true });
+    }
     haxelib(["--global", "remove", "hmm"], { log: true, throwError: true });
   }
 

@@ -10,6 +10,6 @@ haxe build.hxml
 #git add -A
 #git commit -m 'Submit to haxelib'
 
-zip -r hmm.zip LICENSE README.md build.hxml haxelib.json hmm run.n src
+zip -r hmm.zip LICENSE README.md build.hxml haxelib.json hmm hmm.cmd run.n src
 
 haxelib submit hmm.zip

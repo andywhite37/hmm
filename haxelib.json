@@ -4,9 +4,9 @@
   "license": "MIT",
   "tags": ["tools", "helpers", "installation"],
   "description": "Local haxelib installation helper",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "classPath": "src/",
-  "releasenote": "Add support for haxelib dev dependencies, and pass --never option for all haxelib commands",
+  "releasenote": "Add Windows support!  Thanks to elsassph!",
   "contributors": ["andywhite37"],
   "dependencies": {
     "utest": "1.5.0",

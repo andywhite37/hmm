@@ -152,7 +152,7 @@ specifies the project dependencies (similar to npm's package.json).
 
 Example `hmm.json`:
 
-```json
+```js
 {
   "dependencies": [
     {

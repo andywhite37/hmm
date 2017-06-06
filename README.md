@@ -22,7 +22,9 @@ libraries (both from lib.haxe.org and via git/hg/etc.).
 ```
 
 - The `--global` flag is needed to make sure the tool is installed globally.
-- The `setup` command creates a link to the `hmm` tool at `/usr/local/bin/hmm` for ease of use.
+- The `setup` command creates aliases for ease of use:
+  - on Linux/MacOS: creates a link to the `hmm` tool at `/usr/local/bin/hmm`
+  - on Windows: creates a `hmm.cmd` script in `%HAXEPATH%`
 - If you do not run `setup`, you can use the tool by running:
 
 `haxelib --global run hmm [command] [options]`

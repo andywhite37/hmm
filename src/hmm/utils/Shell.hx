@@ -267,9 +267,8 @@ class Shell {
 
   public static function createHmmLink(realPath : String, linkPath : String) : Void {
     if (isWin) {
-      var safeRealPath = realPath.replace("/", "\\");
-      var safeLinkPath = linkPath.replace("/", "\\");
-      runCommand("copy", ["/Y", safeRealPath, safeLinkPath], { log: true, throwError: true });
+      Log.shell('copy $realPath $linkPath');
+      File.saveContent(linkPath, File.getContent(realPath));
     } else {
       runCommand("chmod", ["+x", realPath], { log: true, throwError: true });
       runCommand("sudo", ["rm", linkPath], { log: true, throwError: false });

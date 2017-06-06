@@ -15,6 +15,8 @@ abstract AnsiColor(String) to String {
 }
 
 class AnsiColors {
+  public static var disabled : Bool;
+
   public static function red(input : String) {
     return color(input, Red);
   }
@@ -52,6 +54,6 @@ class AnsiColors {
   }
 
   public static function color(input : String, ansiColor : AnsiColor) : String {
-    return '${ansiColor}$input${AnsiColor.None}';
+    return disabled ? input : '${ansiColor}$input${AnsiColor.None}';
   }
 }

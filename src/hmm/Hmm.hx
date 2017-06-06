@@ -39,7 +39,8 @@ class Hmm {
 
       Shell.init({
         hmmDirectory: Sys.getCwd(),
-        workingDirectory: args.pop()
+        workingDirectory: args.pop(),
+        isWin: Sys.systemName() == "Windows"
       });
 
       var commandType = args.shift();

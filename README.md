@@ -166,7 +166,10 @@ Example `hmm.json`:
       "name": "thx.promise",
       "type": "git",
       "url": "git@github.com:fponticelli/thx.promise",
-      "ref": "master", // Note: while it works, it's considered a bad practice to reference a branch - better to reference a tag, commit, or other non-changing reference
+      "ref": "master", 
+      // Note: while it works, it's considered a bad practice to reference a branch
+      // - better to reference a tag, commit, or other non-changing reference
+      // Use `hmm lock` to automatically save/update the current hash ref in hmm.json
       "dir": "src"
     },
     {
@@ -179,11 +182,14 @@ Example `hmm.json`:
     {
       "name": "mithril",
       "type": "haxelib"
-      // Note: while this works, it's considered a bad practice to reference a library without specifying the version
+      // Note: while this works, it's considered a bad practice to reference a library
+      // without specifying the version
+      // Use `hmm lock` to automatically save/update the current havelib version in hmm.json
     },
     {
       // Note: "dev" dependencies are allowed for convenience, but not considered ideal,
-      // because they do not specify any versioning, and requires others to have the same local directory
+      // because they do not specify any versioning, and requires others to have the 
+      // same local directory
       "name": "mylib",
       "type": "dev",
       "path": "/my/path/mylib"

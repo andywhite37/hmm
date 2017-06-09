@@ -56,7 +56,7 @@ class LockVersionCommand implements ICommand {
         arguments: zero or more library names
 
         - haxelib library: the current version is written
-        - git/hg library: the current hash ref is written
+        - git/hg library: the current tag or commit hash is written
         - dev library: nothing happens
 
         example:
@@ -73,6 +73,22 @@ class LockVersionCommand implements ICommand {
   function lockHgVersion(name : String, url : String, ref : Option<String>, dir : Option<String>) {
     if (!FileSystem.exists('.haxelib/$name/hg/.hg')) throw new ValidationError('Library $name is not checked out', 1);
 
+    var newRef = getHgRef(name);
+    
+    if (switch ref {
+      case None: true;
+      case Some(currentRef): currentRef != newRef;
+    }) {
+      Log.info('Lock $name to ref "${newRef}"');
+      HmmConfigs.addDependencyOrThrow(Git(name, url, Some(newRef), dir), true);
+      return true;
+    }
+    return false;
+  }
+
+  function getHgRef(name : String) {
+    // Get the current commit hash.
+    // The command may append a '+' to the hash, indicating local changes
     var cwd = Sys.getCwd();
     Sys.setCwd('.haxelib/$name/hg');
     var result = Shell.readCommand("hg", ["id", "-i"], { log: false, throwError: true });
@@ -81,38 +97,44 @@ class LockVersionCommand implements ICommand {
     var newRef = StringTools.trim(result.stdout);
     if (!~/^[a-z0-9]+$/i.match(newRef)) throw new ValidationError('Library $name has no ref', 1);
     if (newRef.endsWith("+")) newRef = newRef.substr(0, newRef.length - 1); // changes marker
+    return newRef;
+  }
+
+  function lockGitVersion(name : String, url : String, ref : Option<String>, dir : Option<String>) {
+    if (!FileSystem.exists('.haxelib/$name/git/.git')) throw new ValidationError('Library $name is not checked out', 1);
+
+    var newRef = getGitRef(name);
     
     if (switch ref {
       case None: true;
       case Some(currentRef): currentRef != newRef;
     }) {
-      Log.info('Lock $name to ref ${newRef}');
+      Log.info('Lock $name to ref "${newRef}"');
       HmmConfigs.addDependencyOrThrow(Git(name, url, Some(newRef), dir), true);
       return true;
     }
     return false;
   }
 
-  function lockGitVersion(name : String, url : String, ref : Option<String>, dir : Option<String>) {
-    if (!FileSystem.exists('.haxelib/$name/git/.git')) throw new ValidationError('Library $name is not checked out', 1);
-
+  function getGitRef(name : String) {
+    // Attempt to find a tag pointing to the current commit, 
+    // otherwise get the current commit hash
     var cwd = Sys.getCwd();
     Sys.setCwd('.haxelib/$name/git');
+    var tag = Shell.readCommand("git", ["tag", "--points-at", "HEAD"], { log: false, throwError: true });
     var result = Shell.readCommand("git", ["rev-parse", "--short", "HEAD"], { log: false, throwError: true });
     Sys.setCwd(cwd);
 
+    var newTag = tag.stdout.trim();
     var newRef = result.stdout.trim();
-    if (!~/^[a-z0-9]+$/i.match(newRef)) throw new ValidationError('Library $name has no ref', 1);
-    
-    if (switch ref {
-      case None: true;
-      case Some(currentRef): currentRef != newRef;
-    }) {
-      Log.info('Lock $name to ref ${newRef}');
-      HmmConfigs.addDependencyOrThrow(Git(name, url, Some(newRef), dir), true);
-      return true;
+
+    if (newTag.length > 0) {
+      var tags = ~/[\r\n]+/g.split(newTag);
+      if (tags.length > 0 && tags[0].length > 0) return tags[0];
     }
-    return false;
+
+    if (!~/^[a-z0-9]+$/i.match(newRef)) throw new ValidationError('Library $name has no ref', 1);
+    return newRef;
   }
 
   function lockHaxelibVersion(name : String, version: Option<String>) {

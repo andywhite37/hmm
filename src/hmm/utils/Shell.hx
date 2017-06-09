@@ -312,7 +312,7 @@ class Shell {
     checkStatusCode(statusCode, commandString, options);
   }
 
-  static function readCommand(cmd : String, args : Array<String>, options: { log: Bool, throwError: Bool }) : { statusCode: Int, stdout: String, stderr: String } {
+  static public function readCommand(cmd : String, args : Array<String>, options: { log: Bool, throwError: Bool }) : { statusCode: Int, stdout: String, stderr: String } {
     var commandString = '$cmd ${args.join(" ")}';
     if (options.log) {
       Log.shell(commandString);

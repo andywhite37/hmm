@@ -95,8 +95,10 @@ class HmmConfigs {
     };
   }
 
-  public static function addDependency(lib : LibraryConfig) : VNel<String, HmmConfig> {
-    Log.info('Adding library: "${LibraryConfigs.getName(lib)}" to: ${getHmmJsonPath()}:');
+  public static function addDependency(lib : LibraryConfig, silent = false) : VNel<String, HmmConfig> {
+    if (!silent) {
+      Log.info('Adding library: "${LibraryConfigs.getName(lib)}" to: ${getHmmJsonPath()}:');
+    }
     return readHmmJson()
       .map(function(hmmConfigFile : HmmConfig) : HmmConfig {
         // Remove any existing libraries with the same name as the one we are going to add
@@ -118,8 +120,8 @@ class HmmConfigs {
       });
   }
 
-  public static function addDependencyOrThrow(lib : LibraryConfig) : HmmConfig {
-    return switch addDependency(lib).either {
+  public static function addDependencyOrThrow(lib : LibraryConfig, silent = false) : HmmConfig {
+    return switch addDependency(lib, silent).either {
       case Left(errs) : throw new thx.Error(errs.toArray().join(", "));
       case Right(hmmConfig) : hmmConfig;
     };

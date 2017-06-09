@@ -29,6 +29,7 @@ class Hmm {
         new DevCommand(),
         new UpdateCommand(),
         new RemoveCommand(),
+        new LockVersionCommand(),
         new CheckCommand(),
         new CleanCommand(),
         new HmmUpdateCommand(),

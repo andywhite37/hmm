@@ -4,9 +4,9 @@
   "license": "MIT",
   "tags": ["tools", "helpers", "installation"],
   "description": "Local haxelib installation helper",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "classPath": "src/",
-  "releasenote": "Fixes Windows setup command failure, fix README",
+  "releasenote": "Add lock command from elsassph",
   "contributors": ["andywhite37"],
   "dependencies": {
     "utest": "1.5.0",

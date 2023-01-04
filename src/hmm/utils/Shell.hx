@@ -216,7 +216,6 @@ class Shell {
             if (options.log) {
               Log.warning('git library: "$name" (url: "${url}") does not match currently-installed url: "${remote}"');
             }
-
             return false;
           }
       }

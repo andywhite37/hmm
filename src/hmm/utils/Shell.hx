@@ -201,10 +201,10 @@ class Shell {
       false;
     } else {
 
-      // TODO: origin isn't guaranteed to be the, well, actual origin. depends
-      // on the user. mostly likely suits our needs but may need further
+      // origin isn't guaranteed to be the, well, actual origin. depends on
+      // the user. mostly likely suits our needs but may need further
       // consideration later.
-      var currRemote = gitRemoteGetUrlPush(haxelibPathResult.path, "origin", { log: false, throwError: false });
+      var currRemote = gitRemoteGetUrl(haxelibPathResult.path, "origin", { log: false, throwError: false });
       switch (currRemote) {
         case None :
           if (options.log) {
@@ -324,10 +324,10 @@ class Shell {
     }
   }
 
-  public static function gitRemoteGetUrlPush(path : String, remote : String, options: { log: Bool, throwError: Bool }) : Option<String> {
+  public static function gitRemoteGetUrl(path : String, remote : String, options: { log: Bool, throwError: Bool }) : Option<String> {
     var oldCwd = Shell.workingDirectory;
     setCwd(path, options);
-    var remoteGetUrlResult = readCommand("git", ["remote", "get-url", "--push", remote], options);
+    var remoteGetUrlResult = readCommand("git", ["remote", "get-url", remote], options);
     setCwd(oldCwd, options);
     return if (remoteGetUrlResult.statusCode != 0) {
       None;

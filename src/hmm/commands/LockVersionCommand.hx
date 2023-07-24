@@ -26,7 +26,11 @@ class LockVersionCommand implements ICommand {
     var config = HmmConfigs.readHmmJsonOrThrow();
 
     var libs = config.dependencies;
-    if (args.length > 0) {
+    var longId = args.indexOf("--long-id") != -1;
+
+    // Filter out options.
+    var possibleLibs = args.filter(function (arg) return !arg.startsWith("--") && !arg.startsWith("-"));
+    if (possibleLibs.length > 0) {
       libs = libs.filter(function (lib) return args.indexOf(LibraryConfigs.getName(lib)) >= 0);
     }
 
@@ -36,7 +40,7 @@ class LockVersionCommand implements ICommand {
       checks++;
       if (switch library {
         case Haxelib(name, version) : lockHaxelibVersion(name, version);
-        case Git(name, url, ref, dir) : lockGitVersion(name, url, ref, dir);
+        case Git(name, url, ref, dir) : lockGitVersion(name, url, ref, dir, longId);
         case Mercurial(name, url, ref, dir) : lockHgVersion(name, url, ref, dir);
         case Dev(name, path) : false;
       }) successes.push(library);
@@ -52,6 +56,10 @@ class LockVersionCommand implements ICommand {
     return 'update libraries versions or refs in hmm.json.
     
         usage: hmm lock [<lib1> [... <libn>]]
+
+        options:
+
+        (optional) --long-id - use the full commit hash (id) for git libraries
 
         arguments: zero or more library names
 
@@ -100,10 +108,10 @@ class LockVersionCommand implements ICommand {
     return newRef;
   }
 
-  function lockGitVersion(name : String, url : String, ref : Option<String>, dir : Option<String>) {
+  function lockGitVersion(name : String, url : String, ref : Option<String>, dir : Option<String>, longId : Bool) {
     if (!FileSystem.exists('.haxelib/$name/git/.git')) throw new ValidationError('Library $name is not checked out', 1);
 
-    var newRef = getGitRef(name);
+    var newRef = getGitRef(name, longId);
     
     if (switch ref {
       case None: true;
@@ -116,13 +124,14 @@ class LockVersionCommand implements ICommand {
     return false;
   }
 
-  function getGitRef(name : String) {
+  function getGitRef(name : String, longId : Bool) {
     // Attempt to find a tag pointing to the current commit, 
     // otherwise get the current commit hash
     var cwd = Sys.getCwd();
     Sys.setCwd('.haxelib/$name/git');
     var tag = Shell.readCommand("git", ["tag", "--points-at", "HEAD"], { log: false, throwError: true });
-    var result = Shell.readCommand("git", ["rev-parse", "--short", "HEAD"], { log: false, throwError: true });
+    var revParseArgs = longId ? ["rev-parse", "HEAD"] : ["rev-parse", "--short", "HEAD"];
+    var result = Shell.readCommand("git", revParseArgs, { log: false, throwError: true });
     Sys.setCwd(cwd);
 
     var newTag = tag.stdout.trim();

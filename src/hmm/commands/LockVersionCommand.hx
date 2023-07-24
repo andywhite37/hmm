@@ -11,6 +11,7 @@ import thx.Validation;
 import hmm.HmmConfig;
 import hmm.LibraryConfig;
 import hmm.errors.ValidationError;
+import hmm.utils.Args;
 import hmm.utils.Shell;
 import hmm.utils.Log;
 
@@ -26,7 +27,7 @@ class LockVersionCommand implements ICommand {
     var config = HmmConfigs.readHmmJsonOrThrow();
 
     var libs = config.dependencies;
-    var longId = args.indexOf("--long-id") != -1;
+    var longId = Args.hasAny(args, ["--long-id", "-l"]);
 
     // Filter out options.
     var possibleLibs = args.filter(function (arg) return !arg.startsWith("--") && !arg.startsWith("-"));
@@ -55,11 +56,10 @@ class LockVersionCommand implements ICommand {
   public function getUsage() {
     return 'update libraries versions or refs in hmm.json.
     
-        usage: hmm lock [<lib1> [... <libn>]]
+        usage: hmm lock [-l|--long-id] [<lib1> [... <libn>]]
 
         options:
-
-        (optional) --long-id - use the full commit hash (id) for git libraries
+        (optional) -l or --long-id - use the full commit hash (id) for git libraries
 
         arguments: zero or more library names
 

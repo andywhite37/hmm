@@ -2,6 +2,9 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# Before running this, update the haxelib.json to set the version/releasenote, commit that, then tag it:
+# git tag -a 2.3.4 -m "my message"
+
 if [[ -f hmm.zip ]]; then
   rm hmm.zip
 fi

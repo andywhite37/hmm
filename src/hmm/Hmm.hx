@@ -6,6 +6,7 @@ using thx.Functions;
 
 import hmm.commands.*;
 import hmm.errors.*;
+import hmm.utils.Args;
 import hmm.utils.Log;
 import hmm.utils.Shell;
 
@@ -41,7 +42,8 @@ class Hmm {
       Shell.init({
         hmmDirectory: Sys.getCwd(),
         workingDirectory: args.pop(),
-        isWin: Sys.systemName() == "Windows"
+        isWin: Sys.systemName() == "Windows",
+        isQuiet: Args.hasAny(args, ['--quiet', '-q']),
       });
 
       var commandType = args.shift();

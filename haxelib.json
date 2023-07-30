@@ -2,18 +2,12 @@
   "name": "hmm",
   "url": "https://github.com/andywhite37/hmm",
   "license": "MIT",
-  "tags": [
-    "tools",
-    "helpers",
-    "installation"
-  ],
+  "tags": ["tools", "helpers", "installation"],
   "description": "Local haxelib installation helper",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "classPath": "src/",
-  "releasenote": "Verify remote URL for git dependencies (#19 - steviegt6)",
-  "contributors": [
-    "andywhite37"
-  ],
+  "releasenote": "Add --long-id and --quiet options",
+  "contributors": ["andywhite37"],
   "dependencies": {
     "utest": "1.13.2",
     "thx.core": "0.44.0"

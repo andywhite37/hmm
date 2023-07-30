@@ -238,5 +238,6 @@ Release new version:
 
 ```sh
 > git tag -a 3.4.5 -m 'Some message'
+> $EDITOR haxelib.json # Set version
 > submit
 ```

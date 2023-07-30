@@ -6,12 +6,12 @@ and update project dependencies using `lib.haxe.org` libraries, `git`,
 
 This exists because `haxelib` does not yet support specifying git, mercurial,
 or other non `haxelib`-based project dependencies in the `haxelib.json`,
-`.hxml`, etc. files.  Once `haxelib` adds full git and hg support, this
+`.hxml`, etc. files. Once `haxelib` adds full git and hg support, this
 project can probably go away.
 
 `hmm` relies on the new `haxelib` local repo support, for installing project-local
-Haxe libs in a `.haxelib` directory.  See `haxelib newrepo` for more
-details on this.  It also uses `haxelib` itself for actually installing
+Haxe libs in a `.haxelib` directory. See `haxelib newrepo` for more
+details on this. It also uses `haxelib` itself for actually installing
 libraries (both from lib.haxe.org and via git/hg/etc.).
 
 # Installing hmm
@@ -44,11 +44,13 @@ rather than:
 ```
 
 ### Self-update (update the global hmm install)
+
 ```sh
 > hmm hmm-update
 ```
 
 ### Self-removal (uninstall the global hmm install)
+
 ```sh
 > hmm hmm-remove
 ```
@@ -122,6 +124,7 @@ utest: [1.3.10]
 ```
 
 ### Existing project setup if the project has an hmm.json file
+
 ```sh
 # Clone a project that is using hmm
 > git clone git@github.com:someuser/someproject
@@ -166,7 +169,7 @@ Example `hmm.json`:
       "name": "thx.promise",
       "type": "git",
       "url": "git@github.com:fponticelli/thx.promise",
-      "ref": "master", 
+      "ref": "master",
       // Note: while it works, it's considered a bad practice to reference a branch
       // - better to reference a tag, commit, or other non-changing reference
       // Use `hmm lock` to automatically save/update the current hash ref in hmm.json
@@ -188,7 +191,7 @@ Example `hmm.json`:
     },
     {
       // Note: "dev" dependencies are allowed for convenience, but not considered ideal,
-      // because they do not specify any versioning, and requires others to have the 
+      // because they do not specify any versioning, and requires others to have the
       // same local directory
       "name": "mylib",
       "type": "dev",
@@ -204,6 +207,7 @@ Each dependency is an object with the following keys:
 - `type` - (required) one of `haxelib`, `git`, `hg`, or `dev`
 
 For `type` `haxelib`, the following additional properties are used:
+
 - `version` - (optional) the haxelib library version
 
 For `type` `git` or `mercurial`, the following additional properties are used:
@@ -221,3 +225,18 @@ For `type` `dev`, the following additional properties are used:
 - Almost all `hmm` commands should be run from your project root
   directory (where the `hmm.json` file should be located).
 - See `hmm help` for information about specific commands.
+
+# Development Info
+
+Build the code:
+
+```sh
+> haxe build.hxml
+```
+
+Release new version:
+
+```sh
+> git tag -a 3.4.5 -m 'Some message'
+> submit
+```

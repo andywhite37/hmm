@@ -1,8 +1,8 @@
 package hmm.commands;
 
 using StringTools;
-import haxe.ds.Option;
 
+import haxe.ds.Option;
 import sys.FileSystem;
 import sys.io.File;
 
@@ -20,10 +20,9 @@ class GitCommand implements ICommand {
 
   public static var DEFAULT_REF = "master";
 
-  public function new() {
-  }
+  public function new() {}
 
-  public function run(args : Array<String>) {
+  public function run(args:Array<String>) {
     Shell.ensureHmmJsonExists();
     Shell.createLocalHaxelibRepoIfNotExists();
 
@@ -31,27 +30,27 @@ class GitCommand implements ICommand {
       throw new ValidationError('$type command requires 2, 3, or 4 arguments (<name> <url> [ref] [dir])', 1);
     }
 
-    var name : String = args[0];
-    var url : String = args[1];
-    var ref : Option<String> = Some(DEFAULT_REF);
-    var dir : Option<String> = None;
+    var name:String = args[0];
+    var url:String = args[1];
+    var ref:Option<String> = Some(DEFAULT_REF);
+    var dir:Option<String> = None;
 
     if (args.length >= 3) {
-      ref = Options.ofValue(args[2]).filter.fn(_.trim() != "");
+      ref = Options.ofValue(args[2]).filter(a -> a.trim() != "");
     }
 
     if (args.length == 4) {
-      dir = Options.ofValue(args[3]).filter.fn(_.trim() != "");
+      dir = Options.ofValue(args[3]).filter(a -> a.trim() != "");
     }
 
     // Add the library to the hmm.json
     HmmConfigs.addDependencyOrThrow(Git(name, url, ref, dir));
 
     // Install the library
-    Shell.haxelibGit(name, url, ref, dir, { log: true, throwError: true });
+    Shell.haxelibGit(name, url, ref, dir, {log: true, throwError: true});
 
     // Show the resulting haxelib list
-    Shell.haxelibList({ log: true, throwError: true });
+    Shell.haxelibList({log: true, throwError: true});
   }
 
   public function getUsage() {
@@ -75,6 +74,6 @@ class GitCommand implements ICommand {
         hmm git thx.core git@github.com:fponticelli/thx.core some-tag src
         - assumes ref is "some-tag" and sub-directory is "src"
 ';
+
   }
 }
-

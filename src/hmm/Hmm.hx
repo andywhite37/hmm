@@ -1,7 +1,6 @@
 package hmm;
 
 using Lambda;
-
 using thx.Functions;
 
 import hmm.commands.*;
@@ -11,30 +10,14 @@ import hmm.utils.Log;
 import hmm.utils.Shell;
 
 class Hmm {
-  public static var commands(default, null) : Array<ICommand>;
+  public static var commands(default, null):Array<ICommand>;
 
   public static function main() {
     try {
       commands = [
-        new HelpCommand(),
-        new VersionCommand(),
-        new SetupCommand(),
-        new InitCommand(),
-        new FromHxmlCommand(),
-        new ToHxmlCommand(),
-        new InstallCommand(),
-        new ReinstallCommand(),
-        new HaxelibCommand(),
-        new GitCommand(),
-        new HgCommand(),
-        new DevCommand(),
-        new UpdateCommand(),
-        new RemoveCommand(),
-        new LockVersionCommand(),
-        new CheckCommand(),
-        new CleanCommand(),
-        new HmmUpdateCommand(),
-        new HmmRemoveCommand(),
+        new HelpCommand(), new VersionCommand(), new SetupCommand(), new InitCommand(), new FromHxmlCommand(), new ToHxmlCommand(), new InstallCommand(),
+        new ReinstallCommand(), new HaxelibCommand(), new GitCommand(), new HgCommand(), new DevCommand(), new UpdateCommand(), new RemoveCommand(),
+        new LockVersionCommand(), new CheckCommand(), new CleanCommand(), new HmmUpdateCommand(), new HmmRemoveCommand(),
       ];
 
       var args = Sys.args().copy();
@@ -60,32 +43,32 @@ class Hmm {
       }
 
       command.run(args);
-    } catch (e : ValidationError) {
+    } catch (e:ValidationError) {
       die('Validation error: ${e.message}', e.statusCode);
-    } catch (e : SystemError) {
+    } catch (e:SystemError) {
       die('Execution error: ${e.message}', e.statusCode);
-    } catch (e : Dynamic) {
+    } catch (e:Dynamic) {
       die('Unexpected error: $e', 1);
     }
   }
 
-  static function die(message : String, statusCode : Int) : Void {
+  static function die(message:String, statusCode:Int):Void {
     Log.error(message);
     Log.println('Use "hmm help" to see usage');
     Sys.exit(statusCode);
   }
 
-  public static function printUsageAndExit(statusCode : Int) : Void {
+  public static function printUsageAndExit(statusCode:Int):Void {
     Log.println("Usage: hmm <command> [options]");
     Log.println("");
     Log.println("commands:");
     Log.println("");
-    printUsagesAndExit(commands.map.fn(_.type), statusCode);
+    printUsagesAndExit(commands.map(a -> a.type), statusCode);
   }
 
-  public static function printUsagesAndExit(types : Array<String>, statusCode : Int) : Void {
+  public static function printUsagesAndExit(types:Array<String>, statusCode:Int):Void {
     for (type in types) {
-      var command = commands.find.fn(_.type == type);
+      var command = commands.find(a -> a.type == type);
       if (command == null) {
         throw new ValidationError('invalid command: $type', 1);
       }
@@ -95,4 +78,3 @@ class Hmm {
     Sys.exit(statusCode);
   }
 }
-

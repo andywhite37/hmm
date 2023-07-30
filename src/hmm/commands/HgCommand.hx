@@ -1,8 +1,8 @@
 package hmm.commands;
 
 using StringTools;
-import haxe.ds.Option;
 
+import haxe.ds.Option;
 import sys.FileSystem;
 import sys.io.File;
 
@@ -20,10 +20,9 @@ class HgCommand implements ICommand {
 
   public static var DEFAULT_REF = "default";
 
-  public function new() {
-  }
+  public function new() {}
 
-  public function run(args : Array<String>) {
+  public function run(args:Array<String>) {
     Shell.ensureHmmJsonExists();
     Shell.createLocalHaxelibRepoIfNotExists();
 
@@ -31,22 +30,22 @@ class HgCommand implements ICommand {
       throw new ValidationError('$type command requires 2, 3, or 4 arguments (<name> <url> [ref] [dir])', 1);
     }
 
-    var name : String = args[0];
-    var url : String = args[1];
-    var ref : Option<String> = Some(DEFAULT_REF);
-    var dir : Option<String> = None;
+    var name:String = args[0];
+    var url:String = args[1];
+    var ref:Option<String> = Some(DEFAULT_REF);
+    var dir:Option<String> = None;
 
     if (args.length >= 3) {
-      ref = Options.ofValue(args[2]).filter.fn(_.trim() != "");
+      ref = Options.ofValue(args[2]).filter(a -> a.trim() != "");
     }
 
     if (args.length == 4) {
-      dir = Options.ofValue(args[3]).filter.fn(_.trim() != "");
+      dir = Options.ofValue(args[3]).filter(a -> a.trim() != "");
     }
 
     HmmConfigs.addDependencyOrThrow(Mercurial(name, url, ref, dir));
-    Shell.haxelibHg(name, url, ref, dir, { log: true, throwError: true });
-    Shell.haxelibList({ log: true, throwError: true });
+    Shell.haxelibHg(name, url, ref, dir, {log: true, throwError: true});
+    Shell.haxelibList({log: true, throwError: true});
   }
 
   public function getUsage() {
@@ -67,6 +66,6 @@ class HgCommand implements ICommand {
         hmm hg orm https://bitbucket.org/yar3333/haxe-orm default library
         - install "orm" from bitbucket at branch "default" with sub-directory "library"
 ';
+
   }
 }
-

@@ -24,18 +24,21 @@ typedef ShellOptions = {
 typedef ShellInitOptions = {
   hmmDirectory : String, 
   workingDirectory : String,
-  isWin : Bool
+  isWin : Bool,
+  isQuiet: Bool,
 }
 
 class Shell {
   public static var hmmDirectory(default, default) : String;
   public static var workingDirectory(default, default) : String;
   public static var isWin(default, default) : Bool;
+  public static var isQuiet(default, default) : Bool;
 
   public static function init(options : ShellInitOptions) : Void {
     hmmDirectory = options.hmmDirectory;
     workingDirectory = options.workingDirectory;
     isWin = options.isWin;
+    isQuiet = options.isQuiet;
     AnsiColors.disabled = isWin;
     setCwd(workingDirectory, { log: false });
   }
@@ -140,7 +143,11 @@ class Shell {
 
   public static function haxelib(args : Array<String>, options: ShellOptions) : Void {
     // Always pass the --never option to haxelib, to answer no to all questions
-    runCommand("haxelib", ["--never"].concat(args), options);
+    var commandArgs = ["--never"].concat(args);
+    if (isQuiet) {
+      commandArgs.push("--quiet");
+    }
+    runCommand("haxelib", commandArgs, options);
   }
 
   public static function isAlreadyInstalled(library : LibraryConfig, options: ShellOptions) : Bool {
